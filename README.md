@@ -26,7 +26,7 @@ Update CDK Windows
 ```shell
 npm run build | cdk synth
 ```
-Update CDK iOS
+Update CDK macOS
 ```shell
 npm run build && cdk synth
 ```
