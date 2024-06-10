@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway'
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb'
 import path = require('path');
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
@@ -13,20 +14,6 @@ interface InfrastructureStackProps extends cdk.StackProps {
 export class InfrastructureStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: InfrastructureStackProps) {
     super(scope, id, props);
-
-    // Add a Boolean property "encryptBucket" to the stack constructor.
-    // If true, creates an encrypted bucket. Otherwise, the bucket is unencrypted.
-    // Encrypted bucket uses KMS-managed keys (SSE-KMS).
-    // if (props && props.encryptBucket) {
-    //   new s3.Bucket(this, "MyGroovyBucket", {
-    //     encryption: s3.BucketEncryption.KMS_MANAGED,
-    //     removalPolicy: cdk.RemovalPolicy.DESTROY
-    //   });
-    // } else {
-    //   new s3.Bucket(this, "MyGroovyBucket", {
-    //     removalPolicy: cdk.RemovalPolicy.DESTROY
-    //   });
-    // }
 
     const bucket = new s3.Bucket(this, 'MovieBucket', {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
@@ -67,5 +54,17 @@ export class InfrastructureStack extends cdk.Stack {
     const downloadResource = api.root.addResource('download');
     const downloadIntegration = new apigateway.LambdaIntegration(getMovieLambda);
     downloadResource.addMethod('GET', downloadIntegration);
+
+    const table = new dynamodb.Table(this, 'MovieMetadataTable', {
+      partitionKey: { name: 'fileName', type: dynamodb.AttributeType.STRING },
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // Za testiranje, za produkciju koristi RETAIN ili SNAPSHOT
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST
+    });
+    
+    table.grantWriteData(postMovieLambda);
+
+    postMovieLambda.addEnvironment('TABLE_NAME', table.tableName);
+
+
   }
 }
