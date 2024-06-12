@@ -60,7 +60,7 @@ export class InfrastructureStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // Za testiranje, za produkciju koristi RETAIN ili SNAPSHOT
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST
     });
-    
+
     table.grantWriteData(postMovieLambda);
 
     postMovieLambda.addEnvironment('TABLE_NAME', table.tableName);
