@@ -14,11 +14,5 @@ export class StorageStack extends cdk.Stack {
             bucketName: "streamio-movies-bucket",
             versioned: true
         });
-
-        new cdk.CfnOutput(this, 'MoviesBucketOutput', {
-            value: this.bucket.bucketName,
-            description: 'S3 bucket for storing movies',
-            exportName: 'MoviesBucketExport',
-        });
     }
 }

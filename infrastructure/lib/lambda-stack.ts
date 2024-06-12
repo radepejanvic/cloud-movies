@@ -71,7 +71,5 @@ export class LambdaStack extends cdk.Stack {
         const previewURLResource = api.root.addResource('preview-url');
         const previewURLIntegration = new apigateway.LambdaIntegration(previewURL);
         previewURLResource.addMethod('GET', previewURLIntegration);
-
-
     }
 }
