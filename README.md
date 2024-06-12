@@ -22,11 +22,12 @@ cdk init app --language typescript
 - `./cdk.json` - don\`t touch 
 - `./jest.config.js` - starts tests (defines test suite)
 - `./package.json` - dependecies
+
 Update CDK Windows
 ```shell
 npm run build | cdk synth
 ```
-Update CDK macOS
+Update CDK iOS
 ```shell
 npm run build && cdk synth
 ```
@@ -68,7 +69,6 @@ Lowest level logical separation. (concrete AWS resources)
 Containers of related constructs. Organizing code into more intuitive way. Comunication between stacks is possible. 
 ## App
 Collection of stacks. One app per project.
-
 # Best practices
 CDK apps should be organised into logical units:
 - infrastructure (S3, RDS, VPC)
