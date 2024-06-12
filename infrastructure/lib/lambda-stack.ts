@@ -57,6 +57,21 @@ export class LambdaStack extends cdk.Stack {
         const downloadURLIntegration = new apigateway.LambdaIntegration(downloadURL);
         downloadURLResource.addMethod('GET', downloadURLIntegration);
 
+        const previewURL = new lambda.Function(this, 'PreviewURLLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'presigned_preview_url.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+            environment: {
+                BUCKET_NAME: props.bucket.bucketName
+            }
+        });
+
+        props.bucket.grantRead(previewURL);
+
+        const previewURLResource = api.root.addResource('preview-url');
+        const previewURLIntegration = new apigateway.LambdaIntegration(previewURL);
+        previewURLResource.addMethod('GET', previewURLIntegration);
+
 
     }
 }
