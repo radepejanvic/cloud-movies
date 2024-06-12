@@ -22,8 +22,12 @@ def handler(event, context):
     try:
         presigned_url = s3_client.generate_presigned_url(
             ClientMethod='get_object',
-            Params={'Bucket': bucket_name, 'Key': object_key},
-            ExpiresIn=3600  # URL expires in 1 hour
+            Params={
+                'Bucket': bucket_name,
+                'Key': object_key,
+                'ResponseContentDisposition': f'attachment; filename="{movie_name}.mp4"'
+                },
+            ExpiresIn=3600,  # URL expires in 1 hour            
         )
     except Exception as e:
         return {
