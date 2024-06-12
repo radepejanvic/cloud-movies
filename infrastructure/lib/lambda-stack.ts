@@ -30,7 +30,6 @@ export class LambdaStack extends cdk.Stack {
             runtime: lambda.Runtime.PYTHON_3_9,
             handler: 'presigned_upload_url.handler',
             code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
-            // timeout: cdk.Duration.seconds(30)
             environment: {
                 BUCKET_NAME: props.bucket.bucketName
             }
@@ -41,6 +40,22 @@ export class LambdaStack extends cdk.Stack {
         const uploadURLResource = api.root.addResource('upload-url');
         const uploadURLIntegration = new apigateway.LambdaIntegration(uploadURL);
         uploadURLResource.addMethod('GET', uploadURLIntegration);
+
+
+        const downloadURL = new lambda.Function(this, 'DownloadURLLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'presigned_download_url.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+            environment: {
+                BUCKET_NAME: props.bucket.bucketName
+            }
+        });
+
+        props.bucket.grantRead(downloadURL);
+
+        const downloadURLResource = api.root.addResource('download-url');
+        const downloadURLIntegration = new apigateway.LambdaIntegration(downloadURL);
+        downloadURLResource.addMethod('GET', downloadURLIntegration);
 
 
     }
