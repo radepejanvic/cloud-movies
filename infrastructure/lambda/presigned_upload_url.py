@@ -1,5 +1,5 @@
 import json
-import boto3
+import boto3 # type: ignore
 import os
 
 s3_client = boto3.client('s3')
@@ -17,7 +17,7 @@ def handler(event, context):
 
     # Construct the S3 object key
     # object_key = f"{bucket_name}/{movie_name}-{uuid}/{resolution}"
-    object_key = f"{bucket_name}/{movie_name}-{uuid}/480p"
+    object_key = f"{movie_name}-{uuid}/480p"
     
     try:
         presigned_url = s3_client.generate_presigned_url(
