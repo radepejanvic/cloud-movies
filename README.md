@@ -56,15 +56,12 @@ Destroying the stack
 ```shell
 cdk destroy StackName
 ```
-# Crash course
-[AWS CDK Crash Course for Beginners](https://www.youtube.com/watch?v=D4Asp5g4fp8)
 ## Constructs
 Lowest level logical separation. (concrete AWS resources)
 - **L1** - CFN Resource - lowest level constructs, allows control over every setting, applies to single AWS resource
 - **L2** - Curated - medium level constructs, applies to single AWS resource, sensible defaults, security best practices, helper methods
 - **L3** - Patterns - high level constructs, multiple resources, solves a particular architectural problem (pre-made architectures)
-[Open source library of constructs](https://constructs.dev/)
-[AWS Reference Documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html)
+
 ## Stacks 
 Containers of related constructs. Organizing code into more intuitive way. Comunication between stacks is possible. 
 ## App
@@ -77,3 +74,10 @@ CDK apps should be organised into logical units:
 - optional pipeline for automated deployment
 Stacks define the deployment model of these logical units.
 [official best practices](https://docs.aws.amazon.com/cdk/v2/guide/best-practices.html)
+
+# Links
+- [AWS CDK Crash Course for Beginners](https://www.youtube.com/watch?v=D4Asp5g4fp8)
+- [Open source library of constructs](https://constructs.dev/)
+- [AWS Reference Documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html)
+- [Cognito playlist](https://www.youtube.com/watch?v=oFSU6rhFETk&list=PL9nWRykSBSFhOPUJaA4uaKfroosVbUZX9)
+- [Cognito documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_cognito-readme.html)

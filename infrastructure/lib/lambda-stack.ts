@@ -6,6 +6,7 @@ import * as apigateway from 'aws-cdk-lib/aws-apigateway'
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb'
 import * as iam from 'aws-cdk-lib/aws-iam'
 import path = require('path');
+import { CognitoPool } from './cognito';
 
 interface LambdaStackProps extends cdk.StackProps {
     bucket: s3.Bucket;
