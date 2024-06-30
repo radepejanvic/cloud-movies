@@ -7,6 +7,7 @@ import * as sqs from 'aws-cdk-lib/aws-sqs'
 import path = require('path');
 import { S3EventSourceV2 } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { LambdaDestination } from 'aws-cdk-lib/aws-appconfig';
+import { Transcoder } from './constructs/transcoder-construct';
 
 interface TranscoderStackProps extends cdk.StackProps {
     bucketName: string;
@@ -53,9 +54,13 @@ export class TranscoderStack extends cdk.Stack {
         addToQueue.addEventSource(new S3EventSourceV2(bucket, {
             events: [s3.EventType.OBJECT_CREATED_PUT],
         }));
-        // bucket.addEventNotification(s3.EventType.OBJECT_CREATED_PUT, new LambdaDestination(addToQueue));
 
         transcoderQueue.grantSendMessages(addToQueue);
+
+        new Transcoder(this, 'TranscoderConstruct', {
+            bucket: bucket,
+            queue: transcoderQueue
+        })
 
     }
 }
