@@ -4,6 +4,7 @@ import * as cdk from 'aws-cdk-lib';
 import { StorageStack } from '../lib/storage-stack';
 import { LambdaStack } from '../lib/lambda-stack';
 import { SecurityStack } from '../lib/security-stack';
+import { AngularStack } from '../lib/stacks/angular-stack';
 
 const app = new cdk.App();
 
@@ -14,5 +15,7 @@ new LambdaStack(app, 'LambdaStack', {
 })
 
 new SecurityStack(app, 'SecurityStack');
+
+new AngularStack(app, 'AngularStack');
 
 app.synth();
