@@ -75,9 +75,25 @@ CDK apps should be organised into logical units:
 Stacks define the deployment model of these logical units.
 [official best practices](https://docs.aws.amazon.com/cdk/v2/guide/best-practices.html)
 
+# Lambda layer
+```shell
+tar -xf ffmpeg-git-arm64-static.tar.xz
+mv ffmpeg-git-20240524-arm64-static/ bin
+zip -r ffmpeg bin
+```
+
 # Links
 - [AWS CDK Crash Course for Beginners](https://www.youtube.com/watch?v=D4Asp5g4fp8)
 - [Open source library of constructs](https://constructs.dev/)
 - [AWS Reference Documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html)
 - [Cognito playlist](https://www.youtube.com/watch?v=oFSU6rhFETk&list=PL9nWRykSBSFhOPUJaA4uaKfroosVbUZX9)
 - [Cognito documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_cognito-readme.html)
+- [Event destination cyclic reference issue](https://github.com/aws/aws-cdk/issues/11245)
+- [Lambda layers](https://www.youtube.com/watch?v=jyuZDkiHe2Q)
+- [ffmpeg local installation](https://www.youtube.com/watch?v=IECI72XEox0)
+- [ffmpeg python](https://www.youtube.com/watch?v=ucXTQ0V8qMA)
+- [ffmpeg static library](https://www.johnvansickle.com/ffmpeg/)
+- [ffmpeg python subprocess](https://www.youtube.com/watch?v=ucXTQ0V8qMA&t=327s)
+- [Creating static ffmpeg zip and uploading it to Lambda layer](https://www.youtube.com/watch?v=NQMC1du9pxg)
+- [Layer zip structure](https://docs.aws.amazon.com/lambda/latest/dg/packaging-layers.html)
+- [Python lambda layers](https://docs.aws.amazon.com/lambda/latest/dg/python-layers.html)
