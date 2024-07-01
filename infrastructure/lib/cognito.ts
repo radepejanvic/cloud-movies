@@ -15,7 +15,6 @@ export class CognitoPool extends Construct {
             selfSignUpEnabled: true,
             signInCaseSensitive: false,
             signInAliases: {
-                username: true,
                 email: true,
                 // phone: true,
             },
@@ -29,14 +28,23 @@ export class CognitoPool extends Construct {
                 emailStyle: cognito.VerificationEmailStyle.CODE
             },
             standardAttributes: {
-                fullname: {
+                givenName: {
+                    required: true,
+                    mutable: true,
+                },
+                familyName: {
                     required: true,
                     mutable: true,
                 },
                 email: {
                     required: true,
                     mutable: true,
-                }
+                },
+                birthdate: {
+                    required: true,
+                    mutable: true
+                },
+                
             },
             customAttributes: {
                 company: new cognito.StringAttribute({ mutable: true }),
