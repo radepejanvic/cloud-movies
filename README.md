@@ -81,3 +81,4 @@ Stacks define the deployment model of these logical units.
 - [AWS Reference Documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html)
 - [Cognito playlist](https://www.youtube.com/watch?v=oFSU6rhFETk&list=PL9nWRykSBSFhOPUJaA4uaKfroosVbUZX9)
 - [Cognito documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_cognito-readme.html)
+- [Cognito Angular with Amplify](https://resonant-cement-f3c.notion.site/Implementing-Amazon-Cognito-Authentication-in-Angular-using-AWS-Amplify-dc88cce964d34fb0b41417d76d61efe0)
