@@ -14,5 +14,6 @@ export class StorageStack extends cdk.Stack {
             bucketName: "streamio-movies-bucket",
             versioned: true
         });
+
     }
 }

@@ -8,16 +8,13 @@ def handler(event, context):
     # Extract parameters from the request
     movie_name = event['queryStringParameters']['movie_name']
     uuid = event['queryStringParameters']['uuid']
-    
-    # Extract the resolution parameter if it exists, otherwise default to an empty string
-    # resolution = event['queryStringParameters'].get('resolution', '')
+    resolution = event['queryStringParameters']['resolution']
     
     # Extract the bucket name from the environment variable
     bucket_name = os.environ['BUCKET_NAME']
 
     # Construct the S3 object key
-    # object_key = f"{bucket_name}/{movie_name}-{uuid}/{resolution}"
-    object_key = f"{movie_name}-{uuid}/480p"
+    object_key = f"{movie_name}-{uuid}/{resolution}.mp4"
     
     try:
         presigned_url = s3_client.generate_presigned_url(
