@@ -6,19 +6,28 @@ import { LambdaStack } from '../lib/lambda-stack';
 import { SecurityStack } from '../lib/security-stack';
 import { TranscoderStack } from '../lib/transcoder-stack';
 import { AngularStack } from '../lib/stacks/angular-stack';
+import { DatabaseStack } from '../lib/database-stack';
 
 const app = new cdk.App();
 
 const storage = new StorageStack(app, 'StorageStack')
+const database = new DatabaseStack(app, 'DatabaseStack')
 
 new LambdaStack(app, 'LambdaStack', {
-	bucket: storage.bucket
+	bucket: storage.bucket,
+	metadata: database.metadata
+})
+
+new LambdaStack(app, 'TestStack', {
+	bucket: storage.bucket,
+	metadata: database.metadata
 })
 
 new SecurityStack(app, 'SecurityStack');
 
 new TranscoderStack(app, 'TranscoderStack', {
-	bucketName: storage.bucket.bucketName
+	bucketName: storage.bucket.bucketName,
+	metadata: database.metadata
 });
 // new AngularStack(app, 'AngularStack');
 

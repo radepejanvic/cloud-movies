@@ -4,6 +4,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as sqs from 'aws-cdk-lib/aws-sqs'
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb'
 import path = require('path');
 import { S3EventSourceV2 } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { LambdaDestination } from 'aws-cdk-lib/aws-appconfig';
@@ -11,6 +12,7 @@ import { Transcoder } from './constructs/transcoder-construct';
 
 interface TranscoderStackProps extends cdk.StackProps {
     bucketName: string;
+    metadata: dynamodb.TableV2;
 }
 
 export class TranscoderStack extends cdk.Stack {
@@ -46,10 +48,12 @@ export class TranscoderStack extends cdk.Stack {
             environment: {
                 BUCKET_NAME: props.bucketName,
                 QUEUE_URL: transcoderQueue.queueUrl,
+                METADATA_TABLE: props.metadata.tableName
             }
         });
 
         bucket.grantRead(addToQueue);
+        props.metadata.grantReadWriteData(addToQueue);
 
         addToQueue.addEventSource(new S3EventSourceV2(bucket, {
             events: [s3.EventType.OBJECT_CREATED_PUT],
