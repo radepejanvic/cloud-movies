@@ -9,8 +9,10 @@ def handler(event, context):
 
     ffmpeg_path = '/opt/bin/ffmpeg'
 
-    input_key = event['Object']
-    res = event['Resolution']
+    input = event['input']
+
+    input_key = input['Object']
+    res = input['Resolution']
     output_key = f"{os.path.split(input_key)[0]}/{res}.mp4"
 
     input_file_path = f"/tmp/{os.path.basename(input_key)}"
