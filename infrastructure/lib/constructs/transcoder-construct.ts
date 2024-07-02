@@ -42,21 +42,20 @@ export class Transcoder extends Construct {
         props.bucket.grantRead(transcode);
         props.bucket.grantPut(transcode);
 
-        const job1 = new tasks.LambdaInvoke(this, 'TranscoderJob1', {
+        const transcodeJob = new tasks.LambdaInvoke(this, 'TranscoderJob', {
             lambdaFunction: transcode,
-            timeout: cdk.Duration.seconds(10),
-            // inputPath: ''
+            timeout: cdk.Duration.seconds(300),
+            payload: sfn.TaskInput.fromObject({
+                input: sfn.JsonPath.stringAt('$.input')
+            }),
         })
 
-        const job2 = new tasks.LambdaInvoke(this, 'TranscoderJob2', {
-            lambdaFunction: transcode,
-            timeout: cdk.Duration.seconds(10),
-            // resultPath: '$.transcodeJob',
-        })
+        const mapState = new sfn.Map(this, 'MapState', {
+            maxConcurrency: 5, // Adjust this as needed
+            itemsPath: sfn.JsonPath.stringAt('$.inputs'),
+        }).itemProcessor(transcodeJob);
 
-        const definition = new sfn.Parallel(this, 'ParallelTranscoding')
-            .branch(job1)
-            .branch(job2);
+        const definition = mapState;
 
         const stateMachine = new sfn.StateMachine(this, 'TranscoderStateMachine', {
             definition: definition,
@@ -76,7 +75,9 @@ export class Transcoder extends Construct {
         });
 
         trigger.addEventSource(new SqsEventSource(props.queue, {
-            batchSize: 1,
+            batchSize: 10,
+            maxBatchingWindow: cdk.Duration.minutes(5),
+            reportBatchItemFailures: true
         }));
 
         stateMachine.grantStartExecution(trigger);

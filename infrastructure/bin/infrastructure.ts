@@ -20,6 +20,6 @@ new SecurityStack(app, 'SecurityStack');
 new TranscoderStack(app, 'TranscoderStack', {
 	bucketName: storage.bucket.bucketName
 });
-new AngularStack(app, 'AngularStack');
+// new AngularStack(app, 'AngularStack');
 
 app.synth();
