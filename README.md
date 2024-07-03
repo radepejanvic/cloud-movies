@@ -76,6 +76,7 @@ Stacks define the deployment model of these logical units.
 [official best practices](https://docs.aws.amazon.com/cdk/v2/guide/best-practices.html)
 
 # Lambda layer
+FFMPEG binary lambda layer
 ```shell
 tar -xf ffmpeg-git-arm64-static.tar.xz
 mv ffmpeg-git-20240524-arm64-static/ bin
