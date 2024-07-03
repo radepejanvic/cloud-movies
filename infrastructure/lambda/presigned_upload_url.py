@@ -5,7 +5,7 @@ import logging
 
 s3_client = boto3.client('s3')
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table(os.environ['METADATA_TABLE'])
+table_name = os.environ['METADATA_TABLE']
 
 def handler(event, context):
     # Extract parameters from the request
@@ -49,7 +49,9 @@ def prepare_metadata(event):
     movie_name = event['queryStringParameters']['movie_name']
     uuid = event['queryStringParameters']['uuid']
 
-    metadata = {
+    table = dynamodb.Table(table_name)
+    table.put_item(
+        Item={
         'directory': f'{movie_name}-{uuid}',
         'resolution': event['queryStringParameters']['resolution'],
         'type': 'mp4',
@@ -59,8 +61,6 @@ def prepare_metadata(event):
         'directors': event['queryStringParameters']['directors'],
         'genres': event['queryStringParameters']['genres'],
         'uploaded': False
-    }
-
-    table.put_item(Item=metadata)
+    })
     
  

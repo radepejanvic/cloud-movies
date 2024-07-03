@@ -43,7 +43,7 @@ export class TranscoderStack extends cdk.Stack {
 
         const addToQueue = new lambda.Function(this, 'AddToQueue', {
             runtime: lambda.Runtime.PYTHON_3_9,
-            handler: 'transcoder_queue.handler',
+            handler: 'on_s3_object_put.handler',
             code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
             environment: {
                 BUCKET_NAME: props.bucketName,
