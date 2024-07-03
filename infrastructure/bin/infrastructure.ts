@@ -15,12 +15,14 @@ const database = new DatabaseStack(app, 'DatabaseStack')
 
 new LambdaStack(app, 'LambdaStack', {
 	bucket: storage.bucket,
-	metadata: database.metadata
+	metadata: database.metadata,
+	history: database.history
 })
 
 new LambdaStack(app, 'TestStack', {
 	bucket: storage.bucket,
-	metadata: database.metadata
+	metadata: database.metadata,
+	history: database.history
 })
 
 new SecurityStack(app, 'SecurityStack');
