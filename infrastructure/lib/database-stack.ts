@@ -16,7 +16,55 @@ export class DatabaseStack extends cdk.Stack {
             sortKey: { name: 'resolution', type: dynamodb.AttributeType.STRING },
             globalSecondaryIndexes: [
                 {
-                    indexName: 'actors-index',
+                    indexName: 'title',
+                    partitionKey: {
+                        name: 'resolution',
+                        type: dynamodb.AttributeType.STRING
+                    },
+                    sortKey: {
+                        name: 'directory',
+                        type: dynamodb.AttributeType.STRING
+                    },
+                    projectionType: dynamodb.ProjectionType.ALL
+                },
+                {
+                    indexName: 'description',
+                    partitionKey: {
+                        name: 'resolution',
+                        type: dynamodb.AttributeType.STRING
+                    },
+                    sortKey: {
+                        name: 'directory',
+                        type: dynamodb.AttributeType.STRING
+                    },
+                    projectionType: dynamodb.ProjectionType.ALL
+                },
+                {
+                    indexName: 'actors',
+                    partitionKey: {
+                        name: 'resolution',
+                        type: dynamodb.AttributeType.STRING
+                    },
+                    sortKey: {
+                        name: 'directory',
+                        type: dynamodb.AttributeType.STRING
+                    },
+                    projectionType: dynamodb.ProjectionType.ALL
+                },
+                {
+                    indexName: 'directors',
+                    partitionKey: {
+                        name: 'resolution',
+                        type: dynamodb.AttributeType.STRING
+                    },
+                    sortKey: {
+                        name: 'directory',
+                        type: dynamodb.AttributeType.STRING
+                    },
+                    projectionType: dynamodb.ProjectionType.ALL
+                },
+                {
+                    indexName: 'genres',
                     partitionKey: {
                         name: 'resolution',
                         type: dynamodb.AttributeType.STRING
@@ -27,6 +75,7 @@ export class DatabaseStack extends cdk.Stack {
                     },
                     projectionType: dynamodb.ProjectionType.ALL
                 }
+
             ],
             removalPolicy: cdk.RemovalPolicy.DESTROY
         });
@@ -37,7 +86,7 @@ export class DatabaseStack extends cdk.Stack {
             sortKey: { name: 'timestamp', type: dynamodb.AttributeType.STRING },
             globalSecondaryIndexes: [
                 {
-                    indexName: 'movie-index',
+                    indexName: 'movie',
                     partitionKey: {
                         name: 'userId',
                         type: dynamodb.AttributeType.STRING
