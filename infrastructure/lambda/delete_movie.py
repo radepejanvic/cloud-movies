@@ -16,31 +16,21 @@ def handler(event, context):
         dynamo_response = delete_from_dynamo(directory)
 
         return {
+            'headers': headers,
             'statusCode': 200,
             'body': json.dumps({
                 'message': f'{directory} deleted successfully',
                 'S3': s3_response,
                 'DynamoDB': dynamo_response
-                }),
-            'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',  
-            'Access-Control-Allow-Methods': 'DELETE, OPTIONS', 
-            'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
-            }
+                })
         }
         
     except Exception as e: 
         logging.error(f'Error: {str(e)}')
         return {
+            'headers': headers,
             'statusCode': 500,
             'body': json.dumps({'error': str(e)}),
-            'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',  
-            'Access-Control-Allow-Methods': 'DELETE, OPTIONS', 
-            'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
-            }
         }
 
     
@@ -84,3 +74,11 @@ def delete_from_dynamo(directory):
         )
     
     return response
+
+
+headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',  
+    'Access-Control-Allow-Methods': 'GET, OPTIONS', 
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
+},

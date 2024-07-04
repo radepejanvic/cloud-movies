@@ -70,8 +70,8 @@ export class LambdaStack extends cdk.Stack {
 
         const uploadURL = new lambda.Function(this, 'UploadURLLambda', {
             runtime: lambda.Runtime.PYTHON_3_9,
-            handler: 'presigned_upload_url.handler',
-            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+            handler: 'upload_url.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/presigned-endpoints')),
             environment: {
                 BUCKET_NAME: props.bucket.bucketName,
                 METADATA_TABLE: props.metadata.tableName
@@ -95,8 +95,8 @@ export class LambdaStack extends cdk.Stack {
 
         const downloadURL = new lambda.Function(this, 'DownloadURLLambda', {
             runtime: lambda.Runtime.PYTHON_3_9,
-            handler: 'presigned_download_url.handler',
-            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+            handler: 'download_url.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/presigned-endpoints')),
             environment: {
                 BUCKET_NAME: props.bucket.bucketName,
                 HISTORY_TABLE: props.history.tableName
@@ -120,8 +120,8 @@ export class LambdaStack extends cdk.Stack {
 
         const previewURL = new lambda.Function(this, 'PreviewURLLambda', {
             runtime: lambda.Runtime.PYTHON_3_9,
-            handler: 'presigned_preview_url.handler',
-            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+            handler: 'preview_url.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/presigned-endpoints')),
             environment: {
                 BUCKET_NAME: props.bucket.bucketName,
                 HISTORY_TABLE: props.history.tableName
