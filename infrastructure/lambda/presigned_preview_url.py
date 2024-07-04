@@ -33,11 +33,23 @@ def handler(event, context):
     except Exception as e:
         logging.error(e)
         return {
+            'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',  
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 
+            'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
+        },
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
         }
     
     return {
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',  
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 
+            'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
+        },
         'statusCode': 200,
         'body': json.dumps({'upload_url': presigned_url})
     }
