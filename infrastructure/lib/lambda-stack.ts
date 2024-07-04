@@ -166,5 +166,49 @@ export class LambdaStack extends cdk.Stack {
             integration: deleteMovieIntegration,
             authorizer: httpAuthorizer,
         });
+
+        const getMovie = new lambda.Function(this, 'GetMovieLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'get_movie.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/metadata-endpoints')),
+            environment: {
+                METADATA_TABLE: props.metadata.tableName
+            }
+        });
+
+        props.metadata.grantReadData(getMovie);
+
+        const getMovieIntegration = new HttpLambdaIntegration(
+            "GetMovie",
+            getMovie
+        );
+        api.addRoutes({
+            path: "/get-movie",
+            methods: [apigatewayv2.HttpMethod.GET],
+            integration: getMovieIntegration,
+            authorizer: httpAuthorizer,
+        });
+
+        const queryMovies = new lambda.Function(this, 'QueryMoviesLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'query_movies.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/metadata-endpoints')),
+            environment: {
+                METADATA_TABLE: props.metadata.tableName
+            }
+        });
+
+        props.metadata.grantReadData(queryMovies);
+
+        const queryMovieIntegration = new HttpLambdaIntegration(
+            "GetMovie",
+            queryMovies
+        );
+        api.addRoutes({
+            path: "/movies",
+            methods: [apigatewayv2.HttpMethod.GET],
+            integration: queryMovieIntegration,
+            authorizer: httpAuthorizer,
+        });
     }
 }
