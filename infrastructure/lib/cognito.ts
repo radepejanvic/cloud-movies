@@ -65,14 +65,18 @@ export class CognitoPool extends Construct {
             oAuth: {
                 flows: { authorizationCodeGrant: true },
                 scopes: [cognito.OAuthScope.OPENID],
-                callbackUrls: ['https://myapp.com/home'],
-                logoutUrls: ['https://myapp.com/signin']
+                callbackUrls: [
+                    'http://localhost:4200'
+                ],
+                logoutUrls: [
+                    'http://localhost:4200'
+                ]
             },
             supportedIdentityProviders: [
                 cognito.UserPoolClientIdentityProvider.COGNITO,
             ],
             accessTokenValidity: Duration.minutes(60),
-            idTokenValidity: Duration.minutes(60),
+            idTokenValidity: Duration.days(1),
             refreshTokenValidity: Duration.days(30),
         });
     }
