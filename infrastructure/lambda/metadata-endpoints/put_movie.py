@@ -7,35 +7,44 @@ dynamodb = boto3.client('dynamodb')
 table_name = os.environ['METADATA_TABLE']
 
 def handler(event, context):
-    # Extract path parameter
-    directory = event['pathParameters']['movie_name']
     
+    body = json.loads(event['body'])
+
     try:
-        # Query DynamoDB for items with the given partition key
-        response = dynamodb.query(
+
+        response = dynamodb.update_item(
             TableName=table_name,
-            KeyConditionExpression='directory = :dir',
-            ExpressionAttributeValues={':dir': {'S': directory}}
+            Key={
+                'directory': {'S': body['directory']},
+                'resolution': {'S': body['resolution']}
+            }, 
+            UpdateExpression="SET title = :title, description = :desc, actors = :actors, directors = :directors, genres = :genres",
+            ExpressionAttributeValues={
+                ':title': {'S': body['title']},
+                ':desc': {'S': body['description']},
+                ':actors': {'S': body['actors']},
+                ':directors': {'S': body['directors']},
+                ':genres': {'S': body['genres']}
+            }
         )
         
-        items = response.get('Items', [])
-        
-        if not items:
-            return {
-                'statusCode': 404,
-                'body': json.dumps({'message': 'Movie not found'})
-            }
-        
-        largest_item = max(items, key=lambda x: x['resolution']['S'])
-        
         return {
+            'headers': headers,
             'statusCode': 200,
-            'body': json.dumps(largest_item)
+            'body': json.dumps(response)
         }
     
     except Exception as e:
         logging.error(e)
         return {
+            'headers': headers,
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
         }
+
+headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',  
+    'Access-Control-Allow-Methods': 'GET, OPTIONS', 
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
+},

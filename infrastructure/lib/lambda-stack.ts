@@ -210,5 +210,27 @@ export class LambdaStack extends cdk.Stack {
             integration: queryMovieIntegration,
             authorizer: httpAuthorizer,
         });
+
+        const putMovie = new lambda.Function(this, 'PutMovieLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'put_movie.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/metadata-endpoints')),
+            environment: {
+                METADATA_TABLE: props.metadata.tableName
+            }
+        });
+
+        props.metadata.grantWriteData(putMovie);
+
+        const putMovieIntegration = new HttpLambdaIntegration(
+            "PutMovie",
+            putMovie
+        );
+        api.addRoutes({
+            path: "/put-movie",
+            methods: [apigatewayv2.HttpMethod.PUT],
+            integration: putMovieIntegration,
+            authorizer: httpAuthorizer,
+        });
     }
 }

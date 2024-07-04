@@ -7,6 +7,7 @@ const mapGroupsToPaths = [
   { path: '/DELETE/delete-movie', group: 'BasicUser' },
   { path: '/GET/get-movie', group: 'BasicUser' },
   { path: '/GET/query-movies', group: 'BasicUser' },
+  { path: '/PUT/put-movie', group: 'BasicUser' },
 ];
 
 function extractPathFromMethodArn(methodArn) {
