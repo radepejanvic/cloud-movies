@@ -5,13 +5,15 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigatewayv2 from "aws-cdk-lib/aws-apigatewayv2";
 import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
 import * as lambdaAuthorizers from "aws-cdk-lib/aws-apigatewayv2-authorizers";
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb'
 import path = require('path');
 import { CognitoPool } from './cognito';
 import { Cors } from 'aws-cdk-lib/aws-apigateway';
 
 interface LambdaStackProps extends cdk.StackProps {
     bucket: s3.Bucket;
-    // metada: dynamodb.Table;
+    metadata: dynamodb.TableV2;
+    history: dynamodb.TableV2;
 }
 
 export class LambdaStack extends cdk.Stack {
@@ -71,11 +73,13 @@ export class LambdaStack extends cdk.Stack {
             handler: 'presigned_upload_url.handler',
             code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
             environment: {
-                BUCKET_NAME: props.bucket.bucketName
+                BUCKET_NAME: props.bucket.bucketName,
+                METADATA_TABLE: props.metadata.tableName
             }
         });
 
-        props.bucket.grantPut(uploadURL);
+        props.bucket.grantReadWrite(uploadURL);
+        props.metadata.grantWriteData(uploadURL);
 
 
         const uploadURLIntegration = new HttpLambdaIntegration(
@@ -89,18 +93,19 @@ export class LambdaStack extends cdk.Stack {
             authorizer: httpAuthorizer,
         });
 
-
         const downloadURL = new lambda.Function(this, 'DownloadURLLambda', {
             runtime: lambda.Runtime.PYTHON_3_9,
             handler: 'presigned_download_url.handler',
             code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
             environment: {
-                BUCKET_NAME: props.bucket.bucketName
+                BUCKET_NAME: props.bucket.bucketName,
+                HISTORY_TABLE: props.history.tableName
             }
         });
 
         props.bucket.grantRead(downloadURL);
-        
+        props.history.grantWriteData(downloadURL);
+
         const downloadURLIntegration = new HttpLambdaIntegration(
             "DownloadURL",
             downloadURL
@@ -112,16 +117,19 @@ export class LambdaStack extends cdk.Stack {
             authorizer: httpAuthorizer,
         });
 
+
         const previewURL = new lambda.Function(this, 'PreviewURLLambda', {
             runtime: lambda.Runtime.PYTHON_3_9,
             handler: 'presigned_preview_url.handler',
             code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
             environment: {
-                BUCKET_NAME: props.bucket.bucketName
+                BUCKET_NAME: props.bucket.bucketName,
+                HISTORY_TABLE: props.history.tableName
             }
         });
 
         props.bucket.grantRead(previewURL);
+        props.history.grantWriteData(previewURL);
 
         const previewURLIntegration = new HttpLambdaIntegration(
             "PreviewURL",

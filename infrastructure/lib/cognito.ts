@@ -44,7 +44,7 @@ export class CognitoPool extends Construct {
                     required: true,
                     mutable: true
                 },
-                
+
             },
             customAttributes: {
                 company: new cognito.StringAttribute({ mutable: true }),
