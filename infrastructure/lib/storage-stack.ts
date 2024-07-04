@@ -12,7 +12,15 @@ export class StorageStack extends cdk.Stack {
         this.bucket = new s3.Bucket(this, 'MoviesBucket', {
             removalPolicy: cdk.RemovalPolicy.DESTROY,
             bucketName: "streamio-movies-bucket",
-            versioned: true
+            versioned: true,
+            cors: [
+                {
+                  allowedOrigins: ['*'], 
+                  allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.PUT, s3.HttpMethods.POST, s3.HttpMethods.DELETE], 
+                  allowedHeaders: ['*'], 
+                  maxAge: 3000, 
+                }
+              ]
         });
 
     }
