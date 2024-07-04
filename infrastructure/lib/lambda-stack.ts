@@ -78,5 +78,23 @@ export class LambdaStack extends cdk.Stack {
         const previewURLResource = api.root.addResource('preview-url');
         const previewURLIntegration = new apigateway.LambdaIntegration(previewURL);
         previewURLResource.addMethod('GET', previewURLIntegration);
+
+        const deleteMovie = new lambda.Function(this, 'DeleteMovieLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'delete_movie.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+            environment: {
+                BUCKET_NAME: props.bucket.bucketName,
+                METADATA_TABLE: props.metadata.tableName
+            }
+        });
+
+        props.bucket.grantRead(deleteMovie);
+        props.bucket.grantDelete(deleteMovie);
+        props.metadata.grantReadWriteData(deleteMovie);
+
+        const deleteMovieResource = api.root.addResource('delete-movie');
+        const deleteMovieIntegration = new apigateway.LambdaIntegration(deleteMovie);
+        deleteMovieResource.addMethod('DELETE', deleteMovieIntegration);
     }
 }
