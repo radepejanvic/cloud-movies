@@ -55,7 +55,7 @@ export class LambdaStack extends cdk.Stack {
                 allowCredentials: true,
                 exposeHeaders: ["*"],
             },
-
+             
         });
 
         const httpAuthorizer = new lambdaAuthorizers.HttpLambdaAuthorizer(
@@ -142,29 +142,5 @@ export class LambdaStack extends cdk.Stack {
             authorizer: httpAuthorizer,
         });
 
-        const deleteMovie = new lambda.Function(this, 'DeleteMovieLambda', {
-            runtime: lambda.Runtime.PYTHON_3_9,
-            handler: 'delete_movie.handler',
-            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
-            environment: {
-                BUCKET_NAME: props.bucket.bucketName,
-                METADATA_TABLE: props.metadata.tableName
-            }
-        });
-
-        props.bucket.grantRead(deleteMovie);
-        props.bucket.grantDelete(deleteMovie);
-        props.metadata.grantReadWriteData(deleteMovie);
-
-        const deleteMovieIntegration = new HttpLambdaIntegration(
-            "DeleteMovie",
-            deleteMovie
-        );
-        api.addRoutes({
-            path: "/delete-movie",
-            methods: [apigatewayv2.HttpMethod.DELETE],
-            integration: deleteMovieIntegration,
-            authorizer: httpAuthorizer,
-        });
     }
 }
