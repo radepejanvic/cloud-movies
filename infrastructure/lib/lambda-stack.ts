@@ -10,7 +10,8 @@ import { CognitoPool } from './cognito';
 
 interface LambdaStackProps extends cdk.StackProps {
     bucket: s3.Bucket;
-    // metada: dynamodb.Table;
+    metadata: dynamodb.TableV2;
+    history: dynamodb.TableV2;
 }
 
 export class LambdaStack extends cdk.Stack {
@@ -32,27 +33,30 @@ export class LambdaStack extends cdk.Stack {
             handler: 'presigned_upload_url.handler',
             code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
             environment: {
-                BUCKET_NAME: props.bucket.bucketName
+                BUCKET_NAME: props.bucket.bucketName,
+                METADATA_TABLE: props.metadata.tableName
             }
         });
 
-        props.bucket.grantPut(uploadURL);
+        props.bucket.grantReadWrite(uploadURL);
+        props.metadata.grantWriteData(uploadURL);
 
         const uploadURLResource = api.root.addResource('upload-url');
         const uploadURLIntegration = new apigateway.LambdaIntegration(uploadURL);
         uploadURLResource.addMethod('GET', uploadURLIntegration);
-
 
         const downloadURL = new lambda.Function(this, 'DownloadURLLambda', {
             runtime: lambda.Runtime.PYTHON_3_9,
             handler: 'presigned_download_url.handler',
             code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
             environment: {
-                BUCKET_NAME: props.bucket.bucketName
+                BUCKET_NAME: props.bucket.bucketName,
+                HISTORY_TABLE: props.history.tableName
             }
         });
 
         props.bucket.grantRead(downloadURL);
+        props.history.grantWriteData(downloadURL);
 
         const downloadURLResource = api.root.addResource('download-url');
         const downloadURLIntegration = new apigateway.LambdaIntegration(downloadURL);
@@ -63,11 +67,13 @@ export class LambdaStack extends cdk.Stack {
             handler: 'presigned_preview_url.handler',
             code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
             environment: {
-                BUCKET_NAME: props.bucket.bucketName
+                BUCKET_NAME: props.bucket.bucketName,
+                HISTORY_TABLE: props.history.tableName
             }
         });
 
         props.bucket.grantRead(previewURL);
+        props.history.grantWriteData(previewURL);
 
         const previewURLResource = api.root.addResource('preview-url');
         const previewURLIntegration = new apigateway.LambdaIntegration(previewURL);

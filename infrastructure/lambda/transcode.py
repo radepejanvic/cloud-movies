@@ -1,6 +1,7 @@
 import os
 import boto3 # type: ignore
 import subprocess
+import logging
 
 s3 = boto3.client('s3')
 bucket_name = os.environ['BUCKET_NAME']
@@ -13,6 +14,7 @@ def handler(event, context):
 
     input_key = input['Object']
     res = input['Resolution']
+    # main_replica = input['MainReplica']
     output_key = f"{os.path.split(input_key)[0]}/{res}.mp4"
 
     input_file_path = f"/tmp/{os.path.basename(input_key)}"
@@ -44,8 +46,18 @@ def handler(event, context):
                 'body': error_message
             }
         
-        s3.upload_file(output_file_path, bucket_name, output_key)
+        # s3.upload_file(output_file_path, bucket_name, output_key)
         
+        with open(output_file_path, 'rb') as data:
+            response = s3.put_object(
+                Bucket=bucket_name, 
+                Key=output_key, 
+                Body=data,
+                # Tagging='MainReplica=480p'
+            )
+
+        logging.info(response)
+
         # Handle successful execution
         output_message = f"ffmpeg output: {result.stdout}"
         print(output_message)
