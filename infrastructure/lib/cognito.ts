@@ -1,6 +1,9 @@
 import { Duration, RemovalPolicy } from 'aws-cdk-lib';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import { Construct } from 'constructs';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import path = require('path');
 
 export interface CognitoPoolProps {
     readonly stage: string;
@@ -9,6 +12,13 @@ export interface CognitoPoolProps {
 export class CognitoPool extends Construct {
     constructor(scope: Construct, id: string, props: CognitoPoolProps) {
         super(scope, id);
+        
+        const applyRoleLambda = new lambda.Function(this, 'ApplyRoleambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'apply_role.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda'))
+        });
+
 
         const cognitoPool = new cognito.UserPool(this, 'CognitoPool', {
             userPoolName: `${props.stage}-CognitoPool`,
@@ -79,5 +89,19 @@ export class CognitoPool extends Construct {
             idTokenValidity: Duration.days(1),
             refreshTokenValidity: Duration.days(30),
         });
+
+
+        cognitoPool.addTrigger(cognito.UserPoolOperation.POST_CONFIRMATION, applyRoleLambda);
+
+        applyRoleLambda.role?.attachInlinePolicy(
+            new iam.Policy(this, "userpool-policy", {
+                statements: [
+                    new iam.PolicyStatement({
+                        actions: ["cognito-idp:AdminAddUserToGroup"],
+                        resources: [cognitoPool.userPoolArn],
+                    }),
+                ],
+            })
+        );
     }
 }
