@@ -3,7 +3,8 @@ const { CognitoJwtVerifier } = require('aws-jwt-verify');
 const mapGroupsToPaths = [
   { path: '/GET/upload-url', group: 'BasicUser' },
   { path: '/GET/preview-url', group: 'BasicUser' },
-  { path: '/GET/download-url', group: 'BasicUser' }
+  { path: '/GET/download-url', group: 'BasicUser' },
+  { path: '/DELETE/delete-movie', group: 'BasicUser' },
 ];
 
 function extractPathFromMethodArn(methodArn) {
@@ -37,7 +38,7 @@ function generatePolicy(principalId, effect, resource) {
   };
 }
 
-exports.handler = async function(event) {
+exports.handler = async function (event) {
   console.log('Event:', JSON.stringify(event));
 
   const requestPath = extractPathFromMethodArn(event.routeArn);
@@ -50,7 +51,7 @@ exports.handler = async function(event) {
     return {
       statusCode: 403,
       isAuthorized: false,
-      body: JSON.stringify({ message: 'Invalid path' })
+      body: JSON.stringify({ message: 'Invalid path: ${requestPath}' })
     };
   }
 
@@ -67,9 +68,9 @@ exports.handler = async function(event) {
 
   const token = authHeader.split(' ')[1];
   const verifier = CognitoJwtVerifier.create({
-    userPoolId: 'eu-central-1_QCJqZH9gR', 
+    userPoolId: 'eu-central-1_QCJqZH9gR',
     tokenUse: 'access',
-    clientId: 'jnuaqlhr1kb416ikofua705iv', 
+    clientId: 'jnuaqlhr1kb416ikofua705iv',
   });
 
   let payload;

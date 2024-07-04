@@ -161,7 +161,7 @@ export class LambdaStack extends cdk.Stack {
             deleteMovie
         );
         api.addRoutes({
-            path: "/dedlete-movie",
+            path: "/delete-movie",
             methods: [apigatewayv2.HttpMethod.DELETE],
             integration: deleteMovieIntegration,
             authorizer: httpAuthorizer,
