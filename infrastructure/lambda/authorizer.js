@@ -54,7 +54,7 @@ exports.handler = async function (event) {
     return {
       statusCode: 403,
       isAuthorized: false,
-      body: JSON.stringify({ message: 'Invalid path: ${requestPath}' })
+      body: JSON.stringify({ message: 'Invalid path' })
     };
   }
 
