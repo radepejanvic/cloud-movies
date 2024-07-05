@@ -27,11 +27,9 @@ def handler(event, context):
             ffmpeg_path,
             '-i', input_file_path,
             '-vf', scales[res],
-            '-c:v', 'libx264', 
             '-crf', '23', 
-            '-preset', 'veryfast',
-            '-c:a', 'aac', 
-            '-b:a', '128k', 
+            '-preset', 'ultrafast',
+            '-c:a', 'copy', 
             output_file_path
         ]
 
@@ -46,17 +44,7 @@ def handler(event, context):
                 'body': error_message
             }
         
-        # s3.upload_file(output_file_path, bucket_name, output_key)
-        
-        with open(output_file_path, 'rb') as data:
-            response = s3.put_object(
-                Bucket=bucket_name, 
-                Key=output_key, 
-                Body=data,
-                # Tagging='MainReplica=480p'
-            )
-
-        logging.info(response)
+        s3.upload_file(output_file_path, bucket_name, output_key)
 
         # Handle successful execution
         output_message = f"ffmpeg output: {result.stdout}"

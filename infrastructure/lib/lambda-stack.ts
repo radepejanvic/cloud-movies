@@ -55,7 +55,7 @@ export class LambdaStack extends cdk.Stack {
                 allowCredentials: true,
                 exposeHeaders: ["*"],
             },
-             
+
         });
 
         const httpAuthorizer = new lambdaAuthorizers.HttpLambdaAuthorizer(
@@ -70,8 +70,8 @@ export class LambdaStack extends cdk.Stack {
 
         const uploadURL = new lambda.Function(this, 'UploadURLLambda', {
             runtime: lambda.Runtime.PYTHON_3_9,
-            handler: 'presigned_upload_url.handler',
-            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+            handler: 'upload_url.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/presigned-endpoints')),
             environment: {
                 BUCKET_NAME: props.bucket.bucketName,
                 METADATA_TABLE: props.metadata.tableName
@@ -95,8 +95,8 @@ export class LambdaStack extends cdk.Stack {
 
         const downloadURL = new lambda.Function(this, 'DownloadURLLambda', {
             runtime: lambda.Runtime.PYTHON_3_9,
-            handler: 'presigned_download_url.handler',
-            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+            handler: 'download_url.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/presigned-endpoints')),
             environment: {
                 BUCKET_NAME: props.bucket.bucketName,
                 HISTORY_TABLE: props.history.tableName
@@ -120,8 +120,8 @@ export class LambdaStack extends cdk.Stack {
 
         const previewURL = new lambda.Function(this, 'PreviewURLLambda', {
             runtime: lambda.Runtime.PYTHON_3_9,
-            handler: 'presigned_preview_url.handler',
-            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+            handler: 'preview_url.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/presigned-endpoints')),
             environment: {
                 BUCKET_NAME: props.bucket.bucketName,
                 HISTORY_TABLE: props.history.tableName
@@ -142,5 +142,95 @@ export class LambdaStack extends cdk.Stack {
             authorizer: httpAuthorizer,
         });
 
+        const deleteMovie = new lambda.Function(this, 'DeleteMovieLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'delete_movie.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+            environment: {
+                BUCKET_NAME: props.bucket.bucketName,
+                METADATA_TABLE: props.metadata.tableName
+            }
+        });
+
+        props.bucket.grantRead(deleteMovie);
+        props.bucket.grantDelete(deleteMovie);
+        props.metadata.grantReadWriteData(deleteMovie);
+
+        const deleteMovieIntegration = new HttpLambdaIntegration(
+            "DeleteMovie",
+            deleteMovie
+        );
+        api.addRoutes({
+            path: "/delete-movie",
+            methods: [apigatewayv2.HttpMethod.DELETE],
+            integration: deleteMovieIntegration,
+            authorizer: httpAuthorizer,
+        });
+
+        const getMovie = new lambda.Function(this, 'GetMovieLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'get_movie.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/metadata-endpoints')),
+            environment: {
+                METADATA_TABLE: props.metadata.tableName
+            }
+        });
+
+        props.metadata.grantReadData(getMovie);
+
+        const getMovieIntegration = new HttpLambdaIntegration(
+            "GetMovie",
+            getMovie
+        );
+        api.addRoutes({
+            path: "/get-movie",
+            methods: [apigatewayv2.HttpMethod.GET],
+            integration: getMovieIntegration,
+            authorizer: httpAuthorizer,
+        });
+
+        const queryMovies = new lambda.Function(this, 'QueryMoviesLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'query_movies.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/metadata-endpoints')),
+            environment: {
+                METADATA_TABLE: props.metadata.tableName
+            }
+        });
+
+        props.metadata.grantReadData(queryMovies);
+
+        const queryMovieIntegration = new HttpLambdaIntegration(
+            "GetMovie",
+            queryMovies
+        );
+        api.addRoutes({
+            path: "/movies",
+            methods: [apigatewayv2.HttpMethod.GET],
+            integration: queryMovieIntegration,
+            authorizer: httpAuthorizer,
+        });
+
+        const putMovie = new lambda.Function(this, 'PutMovieLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'put_movie.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/metadata-endpoints')),
+            environment: {
+                METADATA_TABLE: props.metadata.tableName
+            }
+        });
+
+        props.metadata.grantWriteData(putMovie);
+
+        const putMovieIntegration = new HttpLambdaIntegration(
+            "PutMovie",
+            putMovie
+        );
+        api.addRoutes({
+            path: "/put-movie",
+            methods: [apigatewayv2.HttpMethod.PUT],
+            integration: putMovieIntegration,
+            authorizer: httpAuthorizer,
+        });
     }
 }
