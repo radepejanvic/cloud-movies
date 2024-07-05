@@ -36,11 +36,11 @@ def handler(event, context):
         logging.error(e)
         return {
             'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',  
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 
-            'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
-        },
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  
+                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 
+                'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
+            },
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
         }

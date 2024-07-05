@@ -102,3 +102,4 @@ zip -r ffmpeg bin
 - [Python lambda layers](https://docs.aws.amazon.com/lambda/latest/dg/python-layers.html)
 - [DynamoDB playlist](https://www.youtube.com/playlist?list=PL9nWRykSBSFi5QD8ssI0W5odL9S0309E2)
 - [Advanced data modeling with DynamoDB](https://www.youtube.com/watch?v=PVUofrFiS_A)
+- [DynamoDB boto3 examples](https://www.fernandomc.com/posts/ten-examples-of-getting-data-from-dynamodb-with-python-and-boto3/)
