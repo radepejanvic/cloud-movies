@@ -25,13 +25,11 @@ def handler(event, context):
                 'statusCode': 404,
                 'body': json.dumps({'message': 'Movie not found'})
             }
-        
-        largest_item = max(items, key=lambda x: x['resolution']['S'])
-        
+                
         return {
             'headers': headers,
             'statusCode': 200,
-            'body': json.dumps(largest_item)
+            'body': json.dumps(items)
         }
     
     except Exception as e:
