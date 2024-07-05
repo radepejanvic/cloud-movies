@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UploadMovieComponent } from './upload-movie/upload-movie.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -8,7 +9,8 @@ import { UploadMovieComponent } from './upload-movie/upload-movie.component';
     UploadMovieComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   exports: [
     UploadMovieComponent
