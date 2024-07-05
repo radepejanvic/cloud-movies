@@ -4,9 +4,9 @@
       let-user="user"
       let-signOut="signOut"
     >
-      <h1>Welcome {{ user.username }}!</h1>
-      <button (click)="signOut()">Sign Out</button>
-      <input type="file" (change)="onFileSelected($event)">
-
+      <!-- <h1>Welcome {{ user.username }}!</h1> -->
+      <button (click)="signOut()">Sign Out</button> 
+      
+      <router-outlet></router-outlet>
     </ng-template>
   </amplify-authenticator>

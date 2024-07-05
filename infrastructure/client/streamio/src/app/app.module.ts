@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { Amplify } from 'aws-amplify';
 import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { Interceptor } from 'src/auth/interceptor';
+import { Interceptor } from 'src/app/auth/interceptor';
+import { MovieCrudModule } from './movie-crud/movie-crud.module';
 
 
 Amplify.configure({
@@ -26,7 +26,8 @@ Amplify.configure({
     BrowserModule,
     AppRoutingModule,
     AmplifyAuthenticatorModule,
-    HttpClientModule
+    HttpClientModule,
+    MovieCrudModule
   ],
   providers: [
     {
