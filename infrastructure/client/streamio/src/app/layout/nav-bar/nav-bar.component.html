@@ -1,0 +1,8 @@
+<mat-toolbar>
+    <img [routerLink]="['/']"   routerLinkActive="router-link-active" src="../../../assets/images/logo-no-background.svg" alt="image">
+    <div>
+        <app-user-nav-bar *ngIf="role == 'BasicUser'"></app-user-nav-bar>
+        <app-admin-nav-bar *ngIf="role == 'Admin'"></app-admin-nav-bar>
+        <a *ngIf="role != null" (click)="logOut()" >LOGOUT</a>
+    </div>
+</mat-toolbar>
