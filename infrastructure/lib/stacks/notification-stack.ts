@@ -39,7 +39,7 @@ export class NotificationStack extends cdk.Stack {
             retryAttempts: 10
         }));
 
-        const snsListTopicsPolicy = new iam.PolicyStatement({
+        const snsListAndPublishTopicsPolicy = new iam.PolicyStatement({
             actions: [
                 'sns:ListTopics',
                 'sns:CreateTopic',
@@ -48,7 +48,7 @@ export class NotificationStack extends cdk.Stack {
             resources: ['*']
         });
 
-        streamProcessor.addToRolePolicy(snsListTopicsPolicy);
+        streamProcessor.addToRolePolicy(snsListAndPublishTopicsPolicy);
 
         const subProcessor = new lambda.Function(this, 'SubProcessor', {
             runtime: lambda.Runtime.PYTHON_3_9,
@@ -125,6 +125,54 @@ export class NotificationStack extends cdk.Stack {
             integration: putMovieIntegration,
             authorizer: props.httpAuthorizer,
         });
+
+        const getSubscription = new lambda.Function(this, 'GetSubscriptionLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'get_subscription.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda/subscription-endpoints')),
+            environment: {
+                SUBSCRIPTIONS_TABLE: props.subscriptions.tableName
+            }
+        });
+
+        props.subscriptions.grantReadData(getSubscription);
+
+        const getMovieIntegration = new HttpLambdaIntegration(
+            "GetSubscription",
+            getSubscription
+        );
+        props.api.addRoutes({
+            path: "/get-subscription",
+            methods: [apigatewayv2.HttpMethod.GET],
+            integration: getMovieIntegration,
+            authorizer: props.httpAuthorizer,
+        });
+
+        const getTopics = new lambda.Function(this, 'GetTopicsLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'get_topics.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda/subscription-endpoints'))
+        });
+
+        const getTopicsIntegration = new HttpLambdaIntegration(
+            "GetTopics",
+            getTopics
+        );
+        props.api.addRoutes({
+            path: "/get-topics",
+            methods: [apigatewayv2.HttpMethod.GET],
+            integration: getTopicsIntegration,
+            authorizer: props.httpAuthorizer,
+        });
+
+        const snsListTopicsPolicy = new iam.PolicyStatement({
+            actions: [
+                'sns:ListTopics',
+            ],
+            resources: ['*']
+        });
+
+        getTopics.addToRolePolicy(snsListTopicsPolicy);
 
     }
 }

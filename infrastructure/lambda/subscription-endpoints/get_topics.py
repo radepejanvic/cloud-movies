@@ -3,32 +3,16 @@ import json
 import os
 import logging 
 
-dynamodb = boto3.client('dynamodb')
-table_name = os.environ['SUBSCRIPTIONS_TABLE']
+sns = boto3.client('sns')
 
 def handler(event, context):
-
-    userId = event['queryStringParameters']['userId']
-
     try:
-        response = dynamodb.get_item(
-            TableName=table_name,
-            Key={'userId': {'S': userId}}
-        )
-        
-        item = response.get('Item', {})
-        
-        if not item:
-            return {
-                'headers': headers,
-                'statusCode': 404,
-                'body': json.dumps({'message': f'User {userId} not found'})
-            }
+        response = sns.list_topics()
                 
         return {
             'headers': headers,
             'statusCode': 200,
-            'body': json.dumps(item)
+            'body': json.dumps(response['Topics'])
         }
     
     except Exception as e:
