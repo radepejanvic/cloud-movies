@@ -9,6 +9,9 @@ import { Interceptor } from 'src/app/auth/interceptor';
 import { MovieCrudModule } from './movie-crud/movie-crud.module';
 import { LayoutModule } from './layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MovieModule } from './movie/movie.module';
+import { SharedModule } from './shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 Amplify.configure({
@@ -31,7 +34,10 @@ Amplify.configure({
     HttpClientModule,
     MovieCrudModule,
     LayoutModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MovieModule,
+    SharedModule,
+    ReactiveFormsModule
   ],
   providers: [
     {
