@@ -152,7 +152,7 @@ export class UploadMovieComponent implements OnInit{
   }
 
   generateUUID(): string {
-    return uuidv4();
+    return uuidv4().split('-')[0];
   }
 
   getVideoResolution(): string {

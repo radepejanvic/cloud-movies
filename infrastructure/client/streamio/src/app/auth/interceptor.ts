@@ -19,7 +19,6 @@ constructor(private authService: AuthService){}
   ): Observable<HttpEvent<any>> {
 
     const accessToken: any = this.authService.accessToken;
-    console.log(accessToken + " : " + req.method)
 
     if (req.headers.get('skip')) return next.handle(req);
 

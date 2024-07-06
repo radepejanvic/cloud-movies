@@ -133,7 +133,7 @@ export class LambdaStack extends cdk.Stack {
 
         const previewURLIntegration = new HttpLambdaIntegration(
             "PreviewURL",
-            downloadURL
+            previewURL
         );
         api.addRoutes({
             path: "/preview-url",

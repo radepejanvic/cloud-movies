@@ -9,9 +9,9 @@ table_name = os.environ['METADATA_TABLE']
 
 def handler(event, context):
     # Extract parameters from the request
-    movie_name = event['queryStringParameters']['movie_name']
-    uuid = event['queryStringParameters']['uuid']
-    resolution = event['queryStringParameters']['resolution']
+    movie_name = event['queryStringParameters']['movie_name'].strip()
+    uuid = event['queryStringParameters']['uuid'].strip()
+    resolution = event['queryStringParameters']['resolution'].strip()
     
     # Extract the bucket name from the environment variable
     bucket_name = os.environ['BUCKET_NAME']
