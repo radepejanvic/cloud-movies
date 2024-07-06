@@ -88,7 +88,7 @@ export class LambdaStack extends cdk.Stack {
         );
         this.api.addRoutes({
             path: "/upload-url",
-            methods: [apigatewayv2.HttpMethod.GET],
+            methods: [apigatewayv2.HttpMethod.POST],
             integration: uploadURLIntegration,
             authorizer: this.httpAuthorizer,
         });

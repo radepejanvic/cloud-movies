@@ -4,15 +4,17 @@ import os
 import logging
 
 s3_client = boto3.client('s3')
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.client('dynamodb')
 table_name = os.environ['METADATA_TABLE']
 
 def handler(event, context):
     # Extract parameters from the request
-    movie_name = event['queryStringParameters']['movie_name'].strip()
-    uuid = event['queryStringParameters']['uuid'].strip()
-    resolution = event['queryStringParameters']['resolution'].strip()
+    body = json.loads(event['body'])
     
+    movie_name = body['movie_name']
+    uuid = body['uuid']
+    resolution = body['resolution']
+
     # Extract the bucket name from the environment variable
     bucket_name = os.environ['BUCKET_NAME']
 
@@ -30,49 +32,49 @@ def handler(event, context):
             ExpiresIn=3600,  # URL expires in 1 hour
         )
 
-        prepare_metadata(event)
+        prepare_metadata(body)
 
     except Exception as e:
         logging.error(e)
         return {
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',  
-                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 
-                'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
-            },
+            'headers': headers,
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
         }
     
     return {
-        'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',  
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 
-            'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
-        },
+        'headers': headers,
         'statusCode': 200,
         'body': json.dumps({'upload_url': presigned_url}),
     }
 
 
-def prepare_metadata(event):
-    movie_name = event['queryStringParameters']['movie_name']
-    uuid = event['queryStringParameters']['uuid']
+def prepare_metadata(body):
+    movie_name = body['movie_name']
+    uuid = body['uuid']
 
-    table = dynamodb.Table(table_name)
-    table.put_item(
+    directory = f'{movie_name}-{uuid}'
+    logging.warning(body)
+    logging.warning(directory)
+    logging.warning(type(directory))
+    dynamodb.put_item(
+        TableName= table_name,
         Item={
-        'directory': f'{movie_name}-{uuid}',
-        'resolution': event['queryStringParameters']['resolution'],
-        'type': 'mp4',
-        'title': movie_name,
-        'description': event['queryStringParameters']['description'],
-        'actors': event['queryStringParameters']['actors'],
-        'directors': event['queryStringParameters']['directors'],
-        'genres': event['queryStringParameters']['genres'],
-        'uploaded': False
+        'directory': {'S': directory},
+        'resolution': {'S': body['resolution']}, 
+        'type': {'S': 'mp4'},
+        'title': {'S': movie_name},
+        'description': {'S': body['description']},
+        'actors': {'S': body['actors']},
+        'directors': {'S': body['directors']},
+        'genres': {'S': body['genres']},
+        'uploaded': {'BOOL': False},
+        'thumbnail': {'S': body['thumbnail']}
     })
     
- 
+headers =  {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',  
+    'Access-Control-Allow-Methods': 'POST, OPTIONS', 
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
+    },
