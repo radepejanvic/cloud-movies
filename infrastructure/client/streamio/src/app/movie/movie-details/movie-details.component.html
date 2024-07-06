@@ -1,0 +1,42 @@
+<div class="main-container">
+    <h1 class="video-title">{{ movie }}</h1>
+    <video #videoElement width="854" height="480" controls>
+        <source src="{{ currentResolutionUrl }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="resolution-container">
+        <button *ngIf="userRole === 'BasicUser' " class="red-button" (click)="deleteMovie()">Delete</button>
+        <button class="green-button" (click)="downloadMovie()">Download</button>
+        <select (change)="changeResolution($event)" formControlName="resolution">
+            <option *ngFor="let resolution of resolutions" [value]="resolution.url">{{resolution.label}}</option>
+        </select>
+    </div>
+    <div class="about-movie">
+        <div class="about-section">
+            <h2>Description</h2>
+            <p class="description">{{ description }}</p>
+        </div>
+        <div class="about-section">
+            <h2>Genres</h2>
+            <div class="actors">
+                <h3 *ngFor="let genre of genres" >{{ genre }} </h3>
+            </div>
+        </div>
+        <div class="about-section">
+            <h2>Actors</h2>
+            <div class="actors">
+                <h3 *ngFor="let actor of actors" >{{ actor }} </h3>
+            </div>
+        </div>
+        <div class="about-section">
+            <h2>Directors</h2>
+            <div class="actors">
+                <h3 *ngFor="let director of directors" >{{ director }} </h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+  
+  

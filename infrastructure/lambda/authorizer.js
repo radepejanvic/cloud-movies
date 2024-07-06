@@ -1,7 +1,7 @@
 const { CognitoJwtVerifier } = require('aws-jwt-verify');
 
 const mapGroupsToPaths = [
-  { path: '/GET/upload-url', group: 'BasicUser' },
+  { path: '/POST/upload-url', group: 'BasicUser' },
   { path: '/GET/preview-url', group: 'BasicUser' },
   { path: '/GET/download-url', group: 'BasicUser' },
   { path: '/DELETE/delete-movie', group: 'BasicUser' },
@@ -10,6 +10,7 @@ const mapGroupsToPaths = [
   { path: '/PUT/put-movie', group: 'BasicUser' },
   { path: '/POST/post-subscription', group: 'BasicUser' },
   { path: '/PUT/put-subscription', group: 'BasicUser' },
+  { path: '/GET/movies', group: 'BasicUser' },
   { path: '/GET/get-subscription', group: 'BasicUser' },
   { path: '/GET/get-topics', group: 'BasicUser' },
   { path: '/POST/post-like', group: 'BasicUser' },

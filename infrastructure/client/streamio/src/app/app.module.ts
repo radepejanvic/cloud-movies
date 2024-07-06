@@ -7,6 +7,11 @@ import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { Interceptor } from 'src/app/auth/interceptor';
 import { MovieCrudModule } from './movie-crud/movie-crud.module';
+import { LayoutModule } from './layout/layout.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MovieModule } from './movie/movie.module';
+import { SharedModule } from './shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 Amplify.configure({
@@ -27,7 +32,12 @@ Amplify.configure({
     AppRoutingModule,
     AmplifyAuthenticatorModule,
     HttpClientModule,
-    MovieCrudModule
+    MovieCrudModule,
+    LayoutModule,
+    BrowserAnimationsModule,
+    MovieModule,
+    SharedModule,
+    ReactiveFormsModule
   ],
   providers: [
     {

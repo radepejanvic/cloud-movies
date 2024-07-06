@@ -8,9 +8,11 @@ export class AuthService {
 
   userRole = "";
   accessToken : string = "";
+  username: string = "";
 
   constructor() {
     this.accessToken = this.getLocalStorageItemByKeySubstring('accessToken');
+    this.username = this.getLocalStorageItemByKeySubstring('LastAuthUser');
     this.userRole = this.getUserRole()!;
   }
 

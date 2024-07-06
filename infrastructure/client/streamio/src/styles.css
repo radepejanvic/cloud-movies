@@ -1,2 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
 @import url(@aws-amplify/ui/dist/styles.css);
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+button{
+    background-color: #235471;
+    color: #fff;
+}
+
+button:hover{
+    background-color: #153e56;
+}
+
+h1 {
+    color: #153e56;
+}
+
+.green-button{
+    padding: 10px 20px;
+    background-color: #036337;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.green-button:hover{
+    background-color: #04ad61;
+}
+
+.red-button{
+    padding: 10px 20px;
+    background-color: #c31306;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.red-button:hover{
+    background-color: #8a0d04;
+}

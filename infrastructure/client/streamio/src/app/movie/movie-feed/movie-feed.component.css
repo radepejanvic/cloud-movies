@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+.main-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    align-items: center;
+}
+
+#search {
+    display: block;
+    margin: 20px 0;
+    padding: 10px;
+    width: 400px;
+    max-width: 500px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.search-container form{
+    display: flex;
+    align-items: center;
+}
+
+.search-container form button{
+    margin-left: 10px;
+    padding: 5px 15px;
+    background-color: #235471;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 45px;
+    width: 120px;
+}
+/* 
+.search-container form button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+} */
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.movie-card {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 15px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.movie-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.movie-card:hover {
+    transform: scale(1.1);
+    z-index: 1;
+}
+
+.card-container:hover .movie-card:not(:hover) {
+    filter: blur(3px);
+    transition: filter 0.3s ease;
+}
+
+.movie-card:hover {
+    filter: blur(0);
+    z-index: 1;
+}
