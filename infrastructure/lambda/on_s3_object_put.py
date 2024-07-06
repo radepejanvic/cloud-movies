@@ -95,8 +95,7 @@ def replicate_metadata(key):
         'size': Decimal(str(size)), 
         'createdAt': timestamp, 
         'lastModified': timestamp,
-        'mainReplica': get_main_replica(key),
-        'uploaded': True
+        'mainReplica': get_main_replica(key)
     })
     
 
