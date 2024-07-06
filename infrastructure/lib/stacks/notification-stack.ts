@@ -126,6 +126,28 @@ export class NotificationStack extends cdk.Stack {
             authorizer: props.httpAuthorizer,
         });
 
+        const getSubscription = new lambda.Function(this, 'GetSubscriptionLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'get_subscription.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda/subscription-endpoints')),
+            environment: {
+                SUBSCRIPTIONS_TABLE: props.subscriptions.tableName
+            }
+        });
+
+        props.subscriptions.grantReadData(getSubscription);
+
+        const getMovieIntegration = new HttpLambdaIntegration(
+            "GetSubscription",
+            getSubscription
+        );
+        props.api.addRoutes({
+            path: "/get-subscription",
+            methods: [apigatewayv2.HttpMethod.GET],
+            integration: getMovieIntegration,
+            authorizer: props.httpAuthorizer,
+        });
+
     }
 }
 
