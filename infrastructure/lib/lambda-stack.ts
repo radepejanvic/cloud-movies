@@ -17,12 +17,12 @@ interface LambdaStackProps extends cdk.StackProps {
 }
 
 export class LambdaStack extends cdk.Stack {
-    constructor(scope: Construct, id: string, props?: LambdaStackProps) {
-        super(scope, id, props);
 
-        if (!props?.bucket) {
-            throw new Error('Prop bucket is required');
-        }
+    public readonly httpAuthorizer: lambdaAuthorizers.HttpLambdaAuthorizer;
+    public readonly api: apigatewayv2.HttpApi;
+
+    constructor(scope: Construct, id: string, props: LambdaStackProps) {
+        super(scope, id, props);
 
         const authorizerLayer = new lambda.LayerVersion(this, 'Authorizer-Layer', {
             removalPolicy: cdk.RemovalPolicy.RETAIN,
@@ -39,7 +39,7 @@ export class LambdaStack extends cdk.Stack {
             layers: [authorizerLayer]
         });
 
-        const api = new apigatewayv2.HttpApi(this, 'StreamioApi', {
+        this.api = new apigatewayv2.HttpApi(this, 'StreamioApi', {
             apiName: 'Video Streaming Service',
             description: 'Service for upload, download and streaming of videos.',
             corsPreflight: {
@@ -58,7 +58,7 @@ export class LambdaStack extends cdk.Stack {
 
         });
 
-        const httpAuthorizer = new lambdaAuthorizers.HttpLambdaAuthorizer(
+        this.httpAuthorizer = new lambdaAuthorizers.HttpLambdaAuthorizer(
             "HttpLambdaAuthorizer",
             authorizerFunction,
             {
@@ -86,11 +86,11 @@ export class LambdaStack extends cdk.Stack {
             "GetUploadUrl",
             uploadURL
         );
-        api.addRoutes({
+        this.api.addRoutes({
             path: "/upload-url",
             methods: [apigatewayv2.HttpMethod.GET],
             integration: uploadURLIntegration,
-            authorizer: httpAuthorizer,
+            authorizer: this.httpAuthorizer,
         });
 
         const downloadURL = new lambda.Function(this, 'DownloadURLLambda', {
@@ -110,11 +110,11 @@ export class LambdaStack extends cdk.Stack {
             "DownloadURL",
             downloadURL
         );
-        api.addRoutes({
+        this.api.addRoutes({
             path: "/download-url",
             methods: [apigatewayv2.HttpMethod.GET],
             integration: downloadURLIntegration,
-            authorizer: httpAuthorizer,
+            authorizer: this.httpAuthorizer,
         });
 
 
@@ -135,11 +135,11 @@ export class LambdaStack extends cdk.Stack {
             "PreviewURL",
             downloadURL
         );
-        api.addRoutes({
+        this.api.addRoutes({
             path: "/preview-url",
             methods: [apigatewayv2.HttpMethod.GET],
             integration: previewURLIntegration,
-            authorizer: httpAuthorizer,
+            authorizer: this.httpAuthorizer,
         });
 
         const deleteMovie = new lambda.Function(this, 'DeleteMovieLambda', {
@@ -160,11 +160,11 @@ export class LambdaStack extends cdk.Stack {
             "DeleteMovie",
             deleteMovie
         );
-        api.addRoutes({
+        this.api.addRoutes({
             path: "/delete-movie",
             methods: [apigatewayv2.HttpMethod.DELETE],
             integration: deleteMovieIntegration,
-            authorizer: httpAuthorizer,
+            authorizer: this.httpAuthorizer,
         });
 
         const getMovie = new lambda.Function(this, 'GetMovieLambda', {
@@ -182,11 +182,11 @@ export class LambdaStack extends cdk.Stack {
             "GetMovie",
             getMovie
         );
-        api.addRoutes({
+        this.api.addRoutes({
             path: "/get-movie",
             methods: [apigatewayv2.HttpMethod.GET],
             integration: getMovieIntegration,
-            authorizer: httpAuthorizer,
+            authorizer: this.httpAuthorizer,
         });
 
         const queryMovies = new lambda.Function(this, 'QueryMoviesLambda', {
@@ -204,11 +204,11 @@ export class LambdaStack extends cdk.Stack {
             "GetMovie",
             queryMovies
         );
-        api.addRoutes({
+        this.api.addRoutes({
             path: "/movies",
             methods: [apigatewayv2.HttpMethod.GET],
             integration: queryMovieIntegration,
-            authorizer: httpAuthorizer,
+            authorizer: this.httpAuthorizer,
         });
 
         const putMovie = new lambda.Function(this, 'PutMovieLambda', {
@@ -226,11 +226,11 @@ export class LambdaStack extends cdk.Stack {
             "PutMovie",
             putMovie
         );
-        api.addRoutes({
+        this.api.addRoutes({
             path: "/put-movie",
             methods: [apigatewayv2.HttpMethod.PUT],
             integration: putMovieIntegration,
-            authorizer: httpAuthorizer,
+            authorizer: this.httpAuthorizer,
         });
     }
 }

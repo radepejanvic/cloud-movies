@@ -7,6 +7,7 @@ import { SecurityStack } from '../lib/security-stack';
 import { TranscoderStack } from '../lib/transcoder-stack';
 import { AngularStack } from '../lib/stacks/angular-stack';
 import { DatabaseStack } from '../lib/database-stack';
+import { NotificationStack } from '../lib/stacks/notification-stack';
 
 const app = new cdk.App();
 
@@ -19,7 +20,7 @@ new LambdaStack(app, 'LambdaStack', {
 	history: database.history
 })
 
-new LambdaStack(app, 'TestStack', {
+const apigateway = new LambdaStack(app, 'TestStack', {
 	bucket: storage.bucket,
 	metadata: database.metadata,
 	history: database.history
@@ -32,5 +33,12 @@ new TranscoderStack(app, 'TranscoderStack', {
 	metadata: database.metadata
 });
 // new AngularStack(app, 'AngularStack');
+
+new NotificationStack(app, 'NotificationStack', {
+	api: apigateway.api,
+	httpAuthorizer: apigateway.httpAuthorizer,
+	metadata: database.metadata,
+	subscriptions: database.subscriptions
+});
 
 app.synth();

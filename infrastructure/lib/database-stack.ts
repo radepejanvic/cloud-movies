@@ -6,6 +6,7 @@ export class DatabaseStack extends cdk.Stack {
 
     public readonly metadata: dynamodb.TableV2;
     public readonly history: dynamodb.TableV2;
+    public readonly subscriptions: dynamodb.TableV2;
 
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
@@ -14,6 +15,7 @@ export class DatabaseStack extends cdk.Stack {
             tableName: "Metadata",
             partitionKey: { name: 'directory', type: dynamodb.AttributeType.STRING },
             sortKey: { name: 'resolution', type: dynamodb.AttributeType.STRING },
+            dynamoStream: dynamodb.StreamViewType.NEW_IMAGE,
             globalSecondaryIndexes: [
                 {
                     indexName: 'title-index',
@@ -89,6 +91,27 @@ export class DatabaseStack extends cdk.Stack {
                     indexName: 'movie-index',
                     partitionKey: {
                         name: 'movie',
+                        type: dynamodb.AttributeType.STRING
+                    },
+                    sortKey: {
+                        name: 'userId',
+                        type: dynamodb.AttributeType.STRING
+                    },
+                    projectionType: dynamodb.ProjectionType.ALL
+                }
+            ],
+            removalPolicy: cdk.RemovalPolicy.DESTROY
+        });
+
+        this.subscriptions = new dynamodb.TableV2(this, 'SubscriptionsTable', {
+            tableName: "Subscriptions",
+            partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
+            dynamoStream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
+            globalSecondaryIndexes: [
+                {
+                    indexName: 'email-index',
+                    partitionKey: {
+                        name: 'email',
                         type: dynamodb.AttributeType.STRING
                     },
                     sortKey: {
