@@ -11,6 +11,7 @@ import { LayoutModule } from './layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MovieModule } from './movie/movie.module';
 import { SharedModule } from './shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 Amplify.configure({
@@ -35,7 +36,8 @@ Amplify.configure({
     LayoutModule,
     BrowserAnimationsModule,
     MovieModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ],
   providers: [
     {

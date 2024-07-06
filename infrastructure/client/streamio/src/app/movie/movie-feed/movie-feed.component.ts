@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { MovieCard } from '../model/movie.model';
+import { Component, inject } from '@angular/core';
+import {  MovieDB } from '../model/movie.model';
 import { MovieService } from 'src/app/movie-crud/service/movie-service';
 import { environment } from 'src/env/env';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-movie-feed',
@@ -10,20 +11,38 @@ import { environment } from 'src/env/env';
 })
 export class MovieFeedComponent {
 
-  constructor(private movieService: MovieService) {}
+  fb = inject(FormBuilder);
 
-  imageBase64: string = "";
-  movies: MovieCard[] = [];
+  searchForm: FormGroup ;
+
+  constructor(private movieService: MovieService) {
+    this.searchForm = this.fb.group({
+      searchInput: ['']
+    })
+  }
+
+  movies: MovieDB[] = [];
+  searchText: string = "";
 
 
-  ngOnInit(){
-    this.movieService.getAllMovies("").subscribe({
+  ngOnInit(){ 
+    this.getMovies();
+  }
+
+  search() {
+    if (this.searchForm.value.searchInput !== ''){
+      this.getMovies(this.searchForm.value.searchInput);
+    }else{
+      this.getMovies();
+    }
+  }
+  
+  getMovies(query?: string){
+    this.movieService.getAllMovies(query).subscribe({
       next: result => {
         this.movies = result;
-        console.log(result)
       }
     })
-
-    this.imageBase64 = environment.imageBase64;
   }
+
 }

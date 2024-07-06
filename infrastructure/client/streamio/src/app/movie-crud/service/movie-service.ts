@@ -18,19 +18,26 @@ export class MovieService {
     });
 
     getUploadUrl(movieName: string, uuid: string, resolution: string, title: string,
-        description: string, actors: string, directors: string, genres: string): Observable<any>{
+        description: string, actors: string, directors: string, genres: string, thumbnail: string): Observable<any>{
 		
-        let params = new HttpParams()
-            .set('movie_name', movieName )
-            .set('uuid', uuid)
-            .set('resolution', resolution)
-            .set('description', description)
-            .set('actors', actors)
-            .set('directors', directors)
-            .set('genres', genres);
+
+        let body = {
+            'movie_name' : movieName,
+            'uuid' : uuid,
+            'resolution' : resolution,
+            'description' :  description,
+            'actors' : actors,
+            'directors': directors,
+            'genres' : genres,
+            'thumbnail' : thumbnail
+        }
 
         const url =  environment.getUploadUrl ;
-		return this.http.get<any>(url, { params });
+		return this.http.post<any>(url, body, {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        });
 	}
 
 
@@ -75,11 +82,12 @@ export class MovieService {
     getAllMovies(query?: string){
         let params = new HttpParams();
         if(query){
-            params.set('query', query);
+            params = params.set('query', query);
         }
 
         const url = environment.getAllMovies;
         return this.http.get<MovieDB[]>(url, { params });
     }
+
 
 }

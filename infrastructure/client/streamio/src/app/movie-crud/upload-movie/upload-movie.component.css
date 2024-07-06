@@ -71,20 +71,23 @@ textarea.text-input {
     color: rgb(40, 3, 3);
 }
 
-.file-upload {
+.file-upload, .image-upload {
     position: relative;
     overflow: hidden;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     margin: 10px 0;
     cursor: pointer;
+    align-items: center;
 }
 
-.file-upload:hover{
+.file-upload:hover, .image-upload:hover{
     cursor: pointer;
 
 }
 
-.file-label {
+.file-label, .image-label {
     display: inline-block;
     padding: 10px 20px;
     background-color: #235471;
@@ -94,12 +97,12 @@ textarea.text-input {
     cursor: pointer;
 }
 
-.file-label:hover {
+.file-label:hover, .image-label:hover {
     background-color: #153e56;
     cursor: pointer;
 }
 
-.file-input {
+.file-input, .image-input {
     font-size: 100px;
     position: absolute;
     left: 0;
@@ -108,7 +111,7 @@ textarea.text-input {
     cursor: pointer;
 }
 
-.file-name {
+.file-name, .image-name {
     margin-top: 10px;
     color: #333;
     font-weight: bold;

@@ -36,6 +36,12 @@
         {{ genre }} <span (click)="removeFromList('genres', i)" class="remove-x">×</span>
       </li>
     </ul>
+
+    <div class="image-upload">
+        <label class="image-label" for="imageInput">Choose Thumbnail</label>
+        <input id="imageInput" type="file" accept="image/*" (change)="onThumbnailSelected($event)" class="image-input">
+        <div class="image-name" *ngIf="selectedThumbnail">{{ selectedThumbnail }}</div>
+    </div>
   
     <div class="file-upload">
       <label class="file-label" for="fileInput">Choose Video File</label>

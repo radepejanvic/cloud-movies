@@ -3,13 +3,15 @@
 <div class="main-container">
     <h1>Feed</h1>
     <div class="search-container">
-        <input type="text" id="search" placeholder="Search movies...">
-        <button>Search</button>
+        <form [formGroup]="searchForm">
+            <input type="text" id="search" formControlName="searchInput" placeholder="Search movies...">
+            <!-- <button [disabled]="searchForm.get('searchInput')?.value === ''" (click)="search()">Search</button> -->
+            <button  (click)="search()">Search</button>
+        </form>
     </div>
     <div class="card-container" >
-        <div class="movie-card" *ngFor="let card of movies;" [routerLink]="['/movie-details']" [queryParams]="{movie_name: card.directory?.S}">
-            <img src="{{imageBase64}} {{card.image}}">
-            <!-- <img src="../../../assets/images/bb.png"> -->
+        <div class="movie-card" *ngFor="let movie of movies;" [routerLink]="['/movie-details']" [queryParams]="{movie_name: movie.directory?.S}">
+            <img src="{{movie.thumbnail?.S}}">
         </div>
     </div>
 </div>

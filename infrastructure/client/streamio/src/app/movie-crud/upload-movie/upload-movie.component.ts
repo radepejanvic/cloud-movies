@@ -15,8 +15,14 @@ export class UploadMovieComponent implements OnInit{
 
   uploadUrl: string = "";
   isFileSelected: boolean = false;
-  selectedFile: File | null = null;
   selectedFileName: string = ""; 
+  selectedFile: File | null = null;
+
+  isThumbnailSelected: boolean = false;
+  selectedThumbnail: string = "";
+  selectedThumbnailFile: File | null = null;
+
+  base64String: string = "";
 
   movieTitle: string = "";
   movieDescription: string = "";
@@ -62,6 +68,21 @@ export class UploadMovieComponent implements OnInit{
     }
   }
 
+  onThumbnailSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      this.selectedThumbnailFile = file;
+      this.isThumbnailSelected = true;
+      this.selectedThumbnail = file.name;
+
+    }else{
+      this.selectedThumbnailFile = null;
+      this.isThumbnailSelected = false;
+      this.selectedThumbnail = "";
+      console.error('Selected file is not a image.');
+    }
+  }
+
   addToList(listType: string) {
     switch(listType) {
       case 'actors':
@@ -101,6 +122,7 @@ export class UploadMovieComponent implements OnInit{
 
   canUpload(): boolean {
     return this.isFileSelected && 
+           this.isThumbnailSelected &&
            this.movieTitle.trim() !== '' && 
            this.movieDescription.trim() !== '' && 
            this.actors.length > 0 && 
@@ -109,25 +131,57 @@ export class UploadMovieComponent implements OnInit{
   }
 
   uploadFile() {
-    if (this.selectedFile) {
+    if (this.canUpload()) {
 
       const resuloution = this.getVideoResolution();
       const actors = this.processList(this.actors);
       const directors = this.processList(this.directors);
       const genres = this.processList(this.genres);
 
-      this.movieService.getUploadUrl(this.movieTitle, this.generateUUID(),
-       resuloution, this.movieTitle, this.movieDescription, actors, directors, genres).subscribe({
-        next: (result) => {
-            this.uploadUrl = result.upload_url;
-            this.sendMovie();
-        },
-        error: (result) => {
-            console.log(result);
-        }
+      this.convertFileToBase64(this.selectedThumbnailFile!)
+      .then(base64String => {
+        this.movieService.getUploadUrl(this.movieTitle, this.generateUUID(),
+          resuloution, this.movieTitle, this.movieDescription, actors, directors, genres, base64String).subscribe({
+            next: (result) => {
+                this.uploadUrl = result.upload_url;
+                this.sendMovie();
+            },
+            error: (result) => {
+                console.log(result);
+            }
+          })
       })
+      .catch(error => {
+        console.error('Error converting file to Base64:', error);
+      });
+
+      
     }
   }
+
+  convertFileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      
+      // Handle successful file read
+      reader.onload = () => {
+        if (reader.result) {
+          // The result is a Data URL (Base64 string)
+          resolve(reader.result.toString());
+        } else {
+          reject(new Error("File could not be read"));
+        }
+      };
+
+      // Handle errors during file reading
+      reader.onerror = () => {
+        reject(new Error("File reading error"));
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
   sendMovie() {
       
     const fileBlob = new Blob([this.selectedFile!], { type: this.selectedFile!.type });

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MovieDetailsComponent } from './movie-details/movie-details.component';
 import { MovieFeedComponent } from './movie-feed/movie-feed.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 
@@ -14,11 +14,12 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   exports: [
     MovieDetailsComponent,
-    MovieFeedComponent
+    MovieFeedComponent,
   ]
 })
 export class MovieModule { }

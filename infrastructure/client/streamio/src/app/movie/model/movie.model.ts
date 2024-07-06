@@ -11,9 +11,5 @@ export interface MovieDB{
     directors?: {S : string};
     title?: {S : string};
     type?: {S : string};
-}
-
-export interface MovieCard{
-    image?: string;
-    directory?: {S : string};
+    thumbnail?: {S : string};
 }
