@@ -12,6 +12,8 @@ const mapGroupsToPaths = [
   { path: '/PUT/put-subscription', group: 'BasicUser' },
   { path: '/GET/get-subscription', group: 'BasicUser' },
   { path: '/GET/get-topics', group: 'BasicUser' },
+  { path: '/POST/post-like', group: 'BasicUser' },
+  { path: '/GET/get-like', group: 'BasicUser' },
 ];
 
 function extractPathFromMethodArn(methodArn) {

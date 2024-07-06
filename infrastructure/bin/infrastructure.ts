@@ -8,6 +8,7 @@ import { TranscoderStack } from '../lib/transcoder-stack';
 import { AngularStack } from '../lib/stacks/angular-stack';
 import { DatabaseStack } from '../lib/database-stack';
 import { NotificationStack } from '../lib/stacks/notification-stack';
+import { LikesStack } from '../lib/stacks/likes-stack';
 
 const app = new cdk.App();
 
@@ -39,6 +40,12 @@ new NotificationStack(app, 'NotificationStack', {
 	httpAuthorizer: apigateway.httpAuthorizer,
 	metadata: database.metadata,
 	subscriptions: database.subscriptions
+});
+
+new LikesStack(app, 'LikesStack', {
+	api: apigateway.api,
+	httpAuthorizer: apigateway.httpAuthorizer,
+	likes: database.likes
 });
 
 app.synth();
