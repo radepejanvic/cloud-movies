@@ -35,19 +35,18 @@ export class MovieDetailsComponent implements OnInit{
   userRole: string = "";
 
   ngOnInit(){
-  //   this.route.queryParams.subscribe(params => {
-  //     console.log(params);
-  //     params['movie_name'] = "Tour de France-e0ca0803";
-  //     this.movieName = params['movie_name'];
-  //     this.movie = params['movie_name'].split('-')[0];
-  //     this.uuid = params['movie_name'].split('-')[1];
-  //  });
+    this.route.queryParams.subscribe(params => {
+      console.log(params);
+      this.movieName = params['movie_name'];
+      this.movie = params['movie_name'].split('-')[0];
+      this.uuid = params['movie_name'].split('-')[1];
+   });
 
   this.userRole = this.authService.userRole;
 
-  this.movieName = "TDF-1111";
-  this.movie = this.movieName.split('-')[0];
-  this.uuid = this.movieName.split('-')[1];
+  // this.movieName = "TDF-1111";
+  // this.movie = this.movieName.split('-')[0];
+  // this.uuid = this.movieName.split('-')[1];
 
    this.movieService.getMovieByName(this.movieName).subscribe({
     next: (result) => {

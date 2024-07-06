@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MovieDetailsComponent } from './movie-details/movie-details.component';
 import { MovieFeedComponent } from './movie-feed/movie-feed.component';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
+    RouterModule
   ],
   exports: [
     MovieDetailsComponent,

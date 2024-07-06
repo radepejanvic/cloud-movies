@@ -1,1 +1,16 @@
-<p>movie-feed works!</p>
+
+
+<div class="main-container">
+    <h1>Feed</h1>
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search movies...">
+        <button>Search</button>
+    </div>
+    <div class="card-container" >
+        <div class="movie-card" *ngFor="let card of movies;" [routerLink]="['/movie-details']" [queryParams]="{movie_name: card.directory?.S}">
+            <img src="{{imageBase64}} {{card.image}}">
+            <!-- <img src="../../../assets/images/bb.png"> -->
+        </div>
+    </div>
+</div>
+

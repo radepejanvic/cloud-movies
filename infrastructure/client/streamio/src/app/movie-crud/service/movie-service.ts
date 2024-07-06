@@ -72,4 +72,14 @@ export class MovieService {
         return this.http.delete<any>(url, { params });
     }
 
+    getAllMovies(query?: string){
+        let params = new HttpParams();
+        if(query){
+            params.set('query', query);
+        }
+
+        const url = environment.getAllMovies;
+        return this.http.get<MovieDB[]>(url, { params });
+    }
+
 }

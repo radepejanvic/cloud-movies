@@ -17,6 +17,12 @@
             <p class="description">{{ description }}</p>
         </div>
         <div class="about-section">
+            <h2>Genres</h2>
+            <div class="actors">
+                <h3 *ngFor="let genre of genres" >{{ genre }} </h3>
+            </div>
+        </div>
+        <div class="about-section">
             <h2>Actors</h2>
             <div class="actors">
                 <h3 *ngFor="let actor of actors" >{{ actor }} </h3>
