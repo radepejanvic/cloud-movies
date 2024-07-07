@@ -5,6 +5,7 @@ import { AuthGuard } from './auth/guard/auth.gard';
 import { MovieDetailsComponent } from './movie/movie-details/movie-details.component';
 import { MovieFeedComponent } from './movie/movie-feed/movie-feed.component';
 import { UpdateMovieComponent } from './movie-crud/update-movie/update-movie.component';
+import { UserSubscriptionsComponent } from './movie/user-subscriptions/user-subscriptions.component';
 
 const routes: Routes = [
   // {path : "home", component : HomeComponent,},
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path : "movie-details", component : MovieDetailsComponent},
   {path : "feed", component : MovieFeedComponent},
   {path : "update-movie", component : UpdateMovieComponent, canActivate: [AuthGuard], data: {role: ['BasicUser']}},
+  {path : "subscriptions", component : UserSubscriptionsComponent, canActivate: [AuthGuard], data: {role: ['BasicUser']}},
 ];
 
 @NgModule({

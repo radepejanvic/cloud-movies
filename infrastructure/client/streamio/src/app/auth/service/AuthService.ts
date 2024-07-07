@@ -9,10 +9,12 @@ export class AuthService {
   userRole = "";
   accessToken : string = "";
   username: string = "";
+  email: string = "";
 
   constructor() {
     this.accessToken = this.getLocalStorageItemByKeySubstring('accessToken');
     this.username = this.getLocalStorageItemByKeySubstring('LastAuthUser');
+    this.email = JSON.parse(this.getLocalStorageItemByKeySubstring('signInDetails')).loginId;
     this.userRole = this.getUserRole()!;
   }
 
@@ -35,7 +37,7 @@ export class AuthService {
   }
 
   getUserRole(): string | undefined {
-    return this.extractRoleFromJwt(this.getLocalStorageItemByKeySubstring('accessToken'));
+    return this.extractRoleFromJwt(this.getLocalStorageItemByKeySubstring('accessToken')!);
   }
 
   signOut() {
@@ -50,7 +52,7 @@ export class AuthService {
             return localStorage.getItem(key) || '';
         }
     }
-    return ''; 
+    return '';
   }
 
   extractRoleFromJwt(token: string): string | undefined {

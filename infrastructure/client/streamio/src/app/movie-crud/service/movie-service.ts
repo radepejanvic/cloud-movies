@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/service/AuthService';
-import { MovieDB } from 'src/app/movie/model/movie.model';
+import { MovieDB, TopicArn, UserSubscriptions } from 'src/app/movie/model/movie.model';
 import { environment } from 'src/env/env';
 
 @Injectable({
@@ -142,6 +142,49 @@ export class MovieService {
 
         const url = environment.deleteLike;
         return this.http.delete<any>(url, { params });
+    }
+
+    getTopics(){
+        const url = environment.getTopics;
+        return this.http.get<TopicArn[]>(url);
+    }
+
+    getSubscriptions(username: string){
+        let params = new HttpParams()
+        .set('userId', username);
+
+        const url = environment.getSubscription;
+        return this.http.get<UserSubscriptions>(url, { params });
+    }
+
+    postSubscription(username: string, email: string, topics: string[]){
+        let body = {
+            "userId": username, 
+            "email": email,
+            "topics": topics, 
+        }
+
+        const url = environment.postSubscription;
+        return this.http.post<any>(url, body, {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        });
+    }
+
+    putSubscription(username: string, email: string, topics: string[]){
+        let body = {
+            "userId": username, 
+            "email": email,
+            "topics": topics, 
+        }
+
+        const url = environment.putSubscription;
+        return this.http.put<any>(url, body, {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        });
     }
 
 }

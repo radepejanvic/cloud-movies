@@ -1,0 +1,52 @@
+.selection-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+  
+.selection-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+  
+.section {
+    margin-bottom: 20px;
+}
+  
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+  
+.toggle-button {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #e0e0e0;
+    cursor: pointer;
+    width: fit-content;
+}
+  
+.toggle-button.checked {
+    background-color: #4caf50;
+    color: white;
+}
+  
+.submit-button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  
+/* .submit-button:hover {
+    background-color: #0056b3;
+} */
+  
