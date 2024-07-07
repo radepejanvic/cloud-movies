@@ -13,3 +13,10 @@ export interface MovieDB{
     type?: {S : string};
     thumbnail?: {S : string};
 }
+export interface TopicArn{
+    TopicArn?: string;
+}
+
+export interface UserSubscriptions{
+    topics?: {SS : string[]};
+}

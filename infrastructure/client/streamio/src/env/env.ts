@@ -15,4 +15,8 @@ export const environment = {
     isLiked: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/get-like`,
     postLike: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/post-like`,
     deleteLike: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/delete-like`,
+    getTopics: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/get-topics`,
+    getSubscription : `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/get-subscription`,
+    postSubscription : `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/post-subscription`,
+    putSubscription : `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/put-subscription`,
 }
