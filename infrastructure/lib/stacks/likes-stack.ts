@@ -64,6 +64,28 @@ export class LikesStack extends cdk.Stack {
             authorizer: props.httpAuthorizer,
         });
 
+        const deleteLike = new lambda.Function(this, 'DeleteLikeLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'delete_like.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda/likes-endpoints')),
+            environment: {
+                LIKES_TABLE: props.likes.tableName
+            }
+        });
+
+        props.likes.grantWriteData(deleteLike);
+
+        const deleteLikeIntegration = new HttpLambdaIntegration(
+            "DeleteLike",
+            deleteLike
+        );
+        props.api.addRoutes({
+            path: "/delete-like",
+            methods: [apigatewayv2.HttpMethod.DELETE],
+            integration: deleteLikeIntegration,
+            authorizer: props.httpAuthorizer,
+        });
+
     }
 }
 
