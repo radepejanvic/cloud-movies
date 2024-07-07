@@ -89,5 +89,59 @@ export class MovieService {
         return this.http.get<MovieDB[]>(url, { params });
     }
 
+    updateMovie(movieName: string,  resolution: string, title: string,
+        description: string, actors: string, directors: string, genres: string, thumbnail: string){
+
+        let body = {
+            'directory' : movieName,
+            'resolution' : resolution,
+            'title': title, 
+            'description' :  description,
+            'actors' : actors,
+            'directors': directors,
+            'genres' : genres,
+            'thumbnail' : thumbnail
+        }
+        
+        const url = environment.updateMovie;
+        return this.http.put<any>(url, body, {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        });
+    }
+
+    isLiked(username:string, movieName: string){
+        let params = new HttpParams()
+            .set('userId', username)
+            .set('directory', movieName);
+
+        const url = environment.isLiked;
+        return this.http.get<any>(url, { params });
+    }
+
+    postLike(username:string, movieName:string, liked: boolean){
+        let body = {
+            "userId": username, 
+            "directory": movieName, 
+            "liked": liked
+        }
+
+        const url = environment.postLike;
+        return this.http.post<any>(url, body, {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        });
+    }
+
+    deleteLike(username: string, movieName: string){
+        let params = new HttpParams()
+        .set('userId', username)
+        .set('directory', movieName);
+
+        const url = environment.deleteLike;
+        return this.http.delete<any>(url, { params });
+    }
 
 }

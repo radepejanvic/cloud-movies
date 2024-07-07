@@ -18,13 +18,14 @@ def handler(event, context):
                 'directory': {'S': body['directory']},
                 'resolution': {'S': body['resolution']}
             }, 
-            UpdateExpression="SET title = :title, description = :desc, actors = :actors, directors = :directors, genres = :genres",
+            UpdateExpression="SET title = :title, description = :desc, actors = :actors, directors = :directors, genres = :genres, thumbnail = :thumbnail",
             ExpressionAttributeValues={
                 ':title': {'S': body['title']},
                 ':desc': {'S': body['description']},
                 ':actors': {'S': body['actors']},
                 ':directors': {'S': body['directors']},
-                ':genres': {'S': body['genres']}
+                ':genres': {'S': body['genres']},
+                ':thumbnail': {'S': body['thumbnail']},
             }
         )
         

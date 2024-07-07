@@ -5,6 +5,26 @@
         Your browser does not support the video tag.
     </video>
     <div class="resolution-container">
+        <div class="like-container">
+            <div class="like-container">
+                <img
+                  src="../../../assets/images/like.png"
+                  alt="Like"
+                  [src]="isLiked ? '../../../assets/images/like-fill.png' : '../../../assets/images/like.png'"
+                  (click)="toggleLike()"
+                  class="icon"
+                />
+                <img
+                  src="../../../assets/images/dislike.png"
+                  alt="Dislike"
+                  [src]="isDisliked ? '../../../assets/images/dislike-fill.png' : '../../../assets/images/dislike.png'"
+                  (click)="toggleDislike()"
+                  class="icon"
+                />
+            </div>
+            
+        </div>
+        <button *ngIf="userRole === 'BasicUser' "  (click)="updateMovie()">Update</button>
         <button *ngIf="userRole === 'BasicUser' " class="red-button" (click)="deleteMovie()">Delete</button>
         <button class="green-button" (click)="downloadMovie()">Download</button>
         <select (change)="changeResolution($event)" formControlName="resolution">

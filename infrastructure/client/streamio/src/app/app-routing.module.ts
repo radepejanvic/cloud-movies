@@ -4,13 +4,15 @@ import { UploadMovieComponent } from './movie-crud/upload-movie/upload-movie.com
 import { AuthGuard } from './auth/guard/auth.gard';
 import { MovieDetailsComponent } from './movie/movie-details/movie-details.component';
 import { MovieFeedComponent } from './movie/movie-feed/movie-feed.component';
+import { UpdateMovieComponent } from './movie-crud/update-movie/update-movie.component';
 
 const routes: Routes = [
   // {path : "home", component : HomeComponent,},
   { path: '', redirectTo: 'feed', pathMatch: 'full' },
-  {path : "upload-movie", component : UploadMovieComponent,canActivate: [AuthGuard], data: {role: ['BasicUser']}},
+  {path : "upload-movie", component : UploadMovieComponent, canActivate: [AuthGuard], data: {role: ['BasicUser']}},
   {path : "movie-details", component : MovieDetailsComponent},
   {path : "feed", component : MovieFeedComponent},
+  {path : "update-movie", component : UpdateMovieComponent, canActivate: [AuthGuard], data: {role: ['BasicUser']}},
 ];
 
 @NgModule({
