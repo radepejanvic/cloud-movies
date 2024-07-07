@@ -1,5 +1,5 @@
 
-const apiGateway: string = "usxc9r50eg"
+const apiGateway: string = "cp3qf817ol"
 
 export const environment = {
     imageBase64:  'data:image/jpeg;base64,',
@@ -12,4 +12,7 @@ export const environment = {
     deleteMovie: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/delete-movie`,
     getAllMovies: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/movies`,
     updateMovie: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/put-movie`,
+    isLiked: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/get-like`,
+    postLike: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/post-like`,
+    deleteLike: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/delete-like`,
 }

@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/AuthService';
@@ -40,9 +41,9 @@ export class MovieDetailsComponent implements OnInit{
       this.movieName = params['movie_name'];
       this.movie = params['movie_name'].split('-')[0];
       this.uuid = params['movie_name'].split('-')[1];
-   });
+    });
 
-  this.userRole = this.authService.userRole;
+    this.userRole = this.authService.userRole;
 
   // this.movieName = "TDF-1111";
   // this.movie = this.movieName.split('-')[0];
@@ -79,8 +80,20 @@ export class MovieDetailsComponent implements OnInit{
     error: (result) => {
       console.log("Error: ", result)
     }
-
    })
+
+   this.movieService.isLiked(this.authService.username, this.movieName).subscribe({
+    next: result => {
+      if(result.liked.BOOL){
+        this.isLiked = true;
+      }else{
+        this.isDisliked = true;
+      }
+    },
+    error: (err: HttpErrorResponse) => {
+    }
+   })
+
   }
 
   changeResolution(event: Event): void {
@@ -151,6 +164,46 @@ export class MovieDetailsComponent implements OnInit{
 
   updateMovie(){
     this.router.navigate(['update-movie'], {queryParams: { movieName: this.movieName }});
+  }
+
+
+  isLiked = false;
+  isDisliked = false;
+
+  toggleLike() {
+    if (this.isLiked) {
+      this.deleteLike();
+      this.isLiked = false;
+    } else {
+      this.postLike(true);
+      this.isLiked = true;
+      this.isDisliked = false;
+    }
+  }
+
+  toggleDislike() {
+    if (this.isDisliked) {
+      this.deleteLike();
+      this.isDisliked = false;
+    } else {
+      this.postLike(false);
+      this.isDisliked = true;
+      this.isLiked = false;
+    }
+  }
+
+  postLike(isLiked: boolean){
+    this.movieService.postLike(this.authService.username, this.movieName, isLiked).subscribe({
+      next: result => {
+        console.log("Successfully posted isLiked")
+      }
+    })
+  }
+
+  deleteLike(){
+    this.movieService.deleteLike(this.authService.username, this.movieName).subscribe({
+
+    });
   }
 
 }

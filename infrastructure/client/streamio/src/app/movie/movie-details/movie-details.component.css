@@ -98,3 +98,23 @@ select:focus {
     line-height: 1.5; 
 }
 
+
+.like-container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    justify-content: flex-start;
+    padding: 30px;
+}
+  
+.like-container img.icon {
+    width: 20px; 
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+  
+.like-container img.icon:hover {
+    transform: scale(1.1); 
+}
+
