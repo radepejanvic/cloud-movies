@@ -149,5 +149,8 @@ export class MovieDetailsComponent implements OnInit{
     
   }
 
+  updateMovie(){
+    this.router.navigate(['update-movie'], {queryParams: { movieName: this.movieName }});
+  }
 
 }

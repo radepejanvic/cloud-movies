@@ -11,4 +11,5 @@ export const environment = {
     getDownloadUrl: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/download-url`,
     deleteMovie: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/delete-movie`,
     getAllMovies: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/movies`,
+    updateMovie: `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/put-movie`,
 }

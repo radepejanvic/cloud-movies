@@ -119,7 +119,6 @@ textarea.text-input {
 }
 
 .upload-button {
-    width: 180px;
     margin-top: 20px;
     padding: 10px 20px;
     background-color: #12ce79;
@@ -138,7 +137,6 @@ h1{
     font-size: 3em;
     margin: 60px;
 }
-  
 
 .thumbnail-preview {
     margin-top: 20px;

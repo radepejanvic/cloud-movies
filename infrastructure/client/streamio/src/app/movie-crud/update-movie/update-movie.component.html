@@ -1,6 +1,6 @@
 <div class="upload-container">
 
-    <h1>Upload movie</h1>
+    <h1>Update movie</h1>
 
     <input type="text" placeholder="Enter movie title" [(ngModel)]="movieTitle" class="text-input">
     <textarea placeholder="Enter movie description" [(ngModel)]="movieDescription" class="text-input"></textarea>
@@ -47,14 +47,6 @@
         <h2>Thumbnail Preview</h2>
         <img [src]="base64String" alt="Thumbnail Preview" class="thumbnail-image">
     </div>
-  
-    <div class="file-upload">
-      <label class="file-label" for="fileInput">Choose Video File</label>
-      <input id="fileInput" type="file" accept="video/*" (change)="onFileSelected($event)" class="file-input">
-      <div class="file-name" *ngIf="selectedFileName">{{ selectedFileName }}</div>
-    </div>
     
-    <button [disabled]="!canUpload()" (click)="uploadFile()" class="upload-button">Upload Video</button>
+    <button [disabled]="!canUpdate()" (click)="update()" class="upload-button">Update</button>
   </div>
-  
-  

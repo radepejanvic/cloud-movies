@@ -5,6 +5,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MovieService } from '../service/movie-service';
 import { v4 as uuidv4 } from 'uuid';
+import { Router } from '@angular/router';
+import { NgxImageCompressService } from 'ngx-image-compress';
 
 @Component({
   selector: 'app-upload-movie',
@@ -40,7 +42,9 @@ export class UploadMovieComponent implements OnInit{
 
   constructor(private http: HttpClient, 
     private authService: AuthService,
-    private movieService: MovieService) {}
+    private movieService: MovieService,
+    private router: Router,
+    private imageCompress: NgxImageCompressService) {}
 
   ngOnInit(): void {
     
@@ -74,6 +78,14 @@ export class UploadMovieComponent implements OnInit{
       this.selectedThumbnailFile = file;
       this.isThumbnailSelected = true;
       this.selectedThumbnail = file.name;
+
+      this.convertFileToBase64(this.selectedThumbnailFile!)
+        .then(base64String => {
+          this.base64String = base64String;
+        })
+        .catch(error => {
+          console.error('Error converting file to Base64:', error);
+        });
 
     }else{
       this.selectedThumbnailFile = null;
@@ -132,32 +144,62 @@ export class UploadMovieComponent implements OnInit{
 
   uploadFile() {
     if (this.canUpload()) {
-
-      const resuloution = this.getVideoResolution();
+      const resolution = this.getVideoResolution();
       const actors = this.processList(this.actors);
       const directors = this.processList(this.directors);
       const genres = this.processList(this.genres);
+  
+      if (this.selectedThumbnailFile) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const imageDataUrl = reader.result as string;
+  
+          this.imageCompress.compressFile(imageDataUrl, -1, 50, 50) 
+            .then(compressedDataUrl => {
+  
+              this.convertFileToBase64(this.dataURLtoFile(compressedDataUrl, this.selectedThumbnailFile!.name))
+                .then(base64String => {
 
-      this.convertFileToBase64(this.selectedThumbnailFile!)
-      .then(base64String => {
-        this.movieService.getUploadUrl(this.movieTitle, this.generateUUID(),
-          resuloution, this.movieTitle, this.movieDescription, actors, directors, genres, base64String).subscribe({
-            next: (result) => {
-                this.uploadUrl = result.upload_url;
-                this.sendMovie();
-            },
-            error: (result) => {
-                console.log(result);
-            }
-          })
-      })
-      .catch(error => {
-        console.error('Error converting file to Base64:', error);
-      });
-
-      
+                  this.movieService.getUploadUrl(this.movieTitle, this.generateUUID(),
+                    resolution, this.movieTitle, this.movieDescription, actors, directors, genres, base64String)
+                    .subscribe({
+                      next: (result) => {
+                        this.uploadUrl = result.upload_url;
+                        this.sendMovie();
+                      },
+                      error: (result) => {
+                        console.log(result);
+                      }
+                    });
+                })
+                .catch(error => {
+                  console.error('Error converting file to Base64:', error);
+                });
+  
+            })
+            .catch(error => {
+              console.error('Error compressing image:', error);
+            });
+        };
+        reader.readAsDataURL(this.selectedThumbnailFile);
+      } else {
+        console.error('No thumbnail selected.');
+      }
     }
   }
+  
+  dataURLtoFile(dataUrl: string, fileName: string): File {
+    const arr = dataUrl.split(',');
+    const mime = arr[0].match(/:(.*?);/)![1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], fileName, { type: mime });
+  }
+  
 
   convertFileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -194,8 +236,10 @@ export class UploadMovieComponent implements OnInit{
     this.http.put(this.uploadUrl, fileBlob, { headers: headers, observe: 'response' })
       .subscribe(response => {
         console.log('Upload complete', response);
+        this.router.navigate(['feed']);
       }, error => {
         console.error('Upload failed', error);
+        alert('Upload failed');
       });
   }
 
