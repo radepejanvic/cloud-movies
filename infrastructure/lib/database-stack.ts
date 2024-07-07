@@ -7,6 +7,8 @@ export class DatabaseStack extends cdk.Stack {
     public readonly metadata: dynamodb.TableV2;
     public readonly history: dynamodb.TableV2;
     public readonly subscriptions: dynamodb.TableV2;
+    public readonly likes: dynamodb.TableV2;
+    public readonly feed: dynamodb.TableV2;
 
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
@@ -86,6 +88,7 @@ export class DatabaseStack extends cdk.Stack {
             tableName: "WatchHistory",
             partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
             sortKey: { name: 'timestamp', type: dynamodb.AttributeType.STRING },
+            dynamoStream: dynamodb.StreamViewType.NEW_IMAGE,
             globalSecondaryIndexes: [
                 {
                     indexName: 'movie-index',
@@ -121,6 +124,14 @@ export class DatabaseStack extends cdk.Stack {
                     projectionType: dynamodb.ProjectionType.ALL
                 }
             ],
+            removalPolicy: cdk.RemovalPolicy.DESTROY
+        });
+
+        this.likes = new dynamodb.TableV2(this, 'LikesTable', {
+            tableName: "Likes",
+            partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
+            sortKey: { name: 'directory', type: dynamodb.AttributeType.STRING },
+            dynamoStream: dynamodb.StreamViewType.NEW_IMAGE,
             removalPolicy: cdk.RemovalPolicy.DESTROY
         });
 
