@@ -56,15 +56,12 @@ Destroying the stack
 ```shell
 cdk destroy StackName
 ```
-# Crash course
-[AWS CDK Crash Course for Beginners](https://www.youtube.com/watch?v=D4Asp5g4fp8)
 ## Constructs
 Lowest level logical separation. (concrete AWS resources)
 - **L1** - CFN Resource - lowest level constructs, allows control over every setting, applies to single AWS resource
 - **L2** - Curated - medium level constructs, applies to single AWS resource, sensible defaults, security best practices, helper methods
 - **L3** - Patterns - high level constructs, multiple resources, solves a particular architectural problem (pre-made architectures)
-[Open source library of constructs](https://constructs.dev/)
-[AWS Reference Documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html)
+
 ## Stacks 
 Containers of related constructs. Organizing code into more intuitive way. Comunication between stacks is possible. 
 ## App
@@ -77,3 +74,32 @@ CDK apps should be organised into logical units:
 - optional pipeline for automated deployment
 Stacks define the deployment model of these logical units.
 [official best practices](https://docs.aws.amazon.com/cdk/v2/guide/best-practices.html)
+
+# Lambda layer
+FFMPEG binary lambda layer
+```shell
+tar -xf ffmpeg-git-arm64-static.tar.xz
+mv ffmpeg-git-20240524-arm64-static/ bin
+zip -r ffmpeg bin
+```
+
+# Links
+- [AWS CDK Crash Course for Beginners](https://www.youtube.com/watch?v=D4Asp5g4fp8)
+- [Open source library of constructs](https://constructs.dev/)
+- [AWS Reference Documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html)
+- [Boto3 Documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
+- [Cognito playlist](https://www.youtube.com/watch?v=oFSU6rhFETk&list=PL9nWRykSBSFhOPUJaA4uaKfroosVbUZX9)
+- [Cognito documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_cognito-readme.html)
+- [Cognito Angular with Amplify](https://resonant-cement-f3c.notion.site/Implementing-Amazon-Cognito-Authentication-in-Angular-using-AWS-Amplify-dc88cce964d34fb0b41417d76d61efe0)
+- [Event destination cyclic reference issue](https://github.com/aws/aws-cdk/issues/11245)
+- [Lambda layers](https://www.youtube.com/watch?v=jyuZDkiHe2Q)
+- [FFmpeg local installation](https://www.youtube.com/watch?v=IECI72XEox0)
+- [FFmpeg python](https://www.youtube.com/watch?v=ucXTQ0V8qMA)
+- [FFmpeg static library](https://www.johnvansickle.com/ffmpeg/)
+- [FFmpeg python subprocess](https://www.youtube.com/watch?v=ucXTQ0V8qMA&t=327s)
+- [Creating static ffmpeg zip & uploading it to Lambda layer](https://www.youtube.com/watch?v=NQMC1du9pxg)
+- [Lambda layer zip structure](https://docs.aws.amazon.com/lambda/latest/dg/packaging-layers.html)
+- [Python lambda layers](https://docs.aws.amazon.com/lambda/latest/dg/python-layers.html)
+- [DynamoDB playlist](https://www.youtube.com/playlist?list=PL9nWRykSBSFi5QD8ssI0W5odL9S0309E2)
+- [Advanced data modeling with DynamoDB](https://www.youtube.com/watch?v=PVUofrFiS_A)
+- [DynamoDB boto3 examples](https://www.fernandomc.com/posts/ten-examples-of-getting-data-from-dynamodb-with-python-and-boto3/)

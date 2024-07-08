@@ -1,0 +1,52 @@
+<div class="upload-container">
+
+    <h1>Update movie</h1>
+
+    <input type="text" placeholder="Enter movie title" [(ngModel)]="movieTitle" class="text-input">
+    <textarea placeholder="Enter movie description" [(ngModel)]="movieDescription" class="text-input"></textarea>
+  
+    <div class="list-input">
+      <input type="text" placeholder="Add actor" [(ngModel)]="newActor" class="text-input">
+      <button (click)="addToList('actors')" class="add-button">Add</button>
+    </div>
+    <ul class="item-list">
+      <li *ngFor="let actor of actors; let i = index">
+        {{ actor }} <span (click)="removeFromList('actors', i)" class="remove-x">×</span>
+      </li>
+    </ul>
+  
+    <div class="list-input">
+      <input type="text" placeholder="Add director" [(ngModel)]="newDirector" class="text-input">
+      <button (click)="addToList('directors')" class="add-button">Add </button>
+    </div>
+    <ul class="item-list">
+      <li *ngFor="let director of directors; let i = index">
+        {{ director }} <span (click)="removeFromList('directors', i)" class="remove-x">×</span>
+      </li>
+    </ul>
+  
+    <div class="list-input">
+      <select [(ngModel)]="selectedGenre" class="text-input">
+        <option *ngFor="let genre of predefinedGenres" [value]="genre">{{ genre }}</option>
+      </select>
+      <button (click)="addToList('genres')" class="add-button">Add</button>
+    </div>
+    <ul class="item-list">
+      <li *ngFor="let genre of genres; let i = index">
+        {{ genre }} <span (click)="removeFromList('genres', i)" class="remove-x">×</span>
+      </li>
+    </ul>
+
+    <div class="image-upload">
+        <label class="image-label" for="imageInput">Choose Thumbnail</label>
+        <input id="imageInput" type="file" accept="image/*" (change)="onThumbnailSelected($event)" class="image-input">
+        <div class="image-name" *ngIf="selectedThumbnail">{{ selectedThumbnail }}</div>
+    </div>
+
+    <div class="thumbnail-preview" *ngIf="base64String">
+        <h2>Thumbnail Preview</h2>
+        <img [src]="base64String" alt="Thumbnail Preview" class="thumbnail-image">
+    </div>
+    
+    <button [disabled]="!canUpdate()" (click)="update()" class="upload-button">Update</button>
+  </div>

@@ -1,0 +1,150 @@
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+.text-input {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea.text-input {
+    resize: none;
+}
+
+.list-input {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.add-button {
+    margin-left: 10px;
+    padding: 5px 15px;
+    background-color: #235471;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 45px;
+    width: 120px;
+}
+
+.add-button:hover {
+    background-color: #153e56;  
+}
+
+.item-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.item-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+.remove-x {
+    font-size: 20px;
+    color: rgb(95, 38, 38);
+    cursor: pointer;
+}
+
+.remove-x:hover {
+    color: rgb(40, 3, 3);
+}
+
+.file-upload, .image-upload {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 10px 0;
+    cursor: pointer;
+    align-items: center;
+}
+
+.file-upload:hover, .image-upload:hover{
+    cursor: pointer;
+
+}
+
+.file-label, .image-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #235471;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-label:hover, .image-label:hover {
+    background-color: #153e56;
+    cursor: pointer;
+}
+
+.file-input, .image-input {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-name, .image-name {
+    margin-top: 10px;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+}
+
+.upload-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #12ce79;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.upload-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+h1{
+    font-size: 3em;
+    margin: 60px;
+}
+
+.thumbnail-preview {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.thumbnail-image {
+    max-width: 500px;
+    height: auto;
+}
+  

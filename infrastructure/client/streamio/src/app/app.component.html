@@ -1,0 +1,13 @@
+<amplify-authenticator [loginMechanisms]="['email']" [formFields]="formFields" [signUpAttributes]="['given_name', 'family_name', 'birthdate', 'preferred_username']">
+    <ng-template
+      amplifySlot="authenticated"
+      let-user="user"
+      let-signOut="signOut"
+    >
+
+    <app-nav-bar></app-nav-bar>
+    <router-outlet></router-outlet>
+
+    
+    </ng-template>
+  </amplify-authenticator>
