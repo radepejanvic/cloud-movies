@@ -6,7 +6,7 @@ import logging
 dynamodb = boto3.client('dynamodb')
 sqs = boto3.client('sqs')
 
-likes_table = os.environ['LIKES_TABLE']
+likes_table = os.environ['HISTORY_TABLE']
 metadata_table = os.environ['METADATA_TABLE']
 queue_url = os.environ['QUEUE_URL']
 
@@ -19,50 +19,28 @@ def handler(event, context):
 
     try: 
         for record in event['Records']: 
-            if record['eventName'] == 'REMOVE':
-                image = record['dynamodb']['OldImage']
+            if not record['eventName'] == 'INSERT':
+                continue
             else: 
                 image = record['dynamodb']['NewImage']
             
-            categories = get_categories(image['directory'])
+            categories = get_categories(image['movie'])
             if not categories: 
                 return
             
-            points = get_points(record)
-            if not points == 0:
-                response = sqs.send_message(
-                    QueueUrl=queue_url,
-                    MessageBody=json.dumps({
-                        'userId': image['userId']['S'], 
-                        'categories': list(categories),
-                        'points': get_points(record),
-                        'sender': 'likes_processor'
-                    })
-                )
-
-                logging.info(f'SQS: {response}')
+            response = sqs.send_message(
+                QueueUrl=queue_url,
+                MessageBody=json.dumps({
+                    'userId': image['userId']['S'], 
+                    'categories': list(categories),
+                    'points': 2,
+                    'sender': 'history_processor'
+                })
+            )
+            logging.info(f'SQS: {response}')
 
     except Exception as e: 
         logging.error(e)
-
-
-def get_points(record):
-    if record['eventName'] == 'INSERT': 
-        new = record['dynamodb']['NewImage']
-        return 1 if new['liked']['BOOL'] else -1
-    
-    if record['eventName'] == 'REMOVE':
-        old = record['dynamodb']['OldImage']
-        return -1 if old['liked']['BOOL'] else 1
-    
-    new = record['dynamodb']['NewImage']
-    old = record['dynamodb']['OldImage']
-    
-    if new['liked']['BOOL'] and not old['liked']['BOOL']: 
-        return 2 
-    elif not new['liked']['BOOL'] and old['liked']['BOOL']: 
-        return -2
-    return 0
 
 
 def get_categories(directory): 
@@ -80,9 +58,10 @@ def get_categories(directory):
     logging.info(f'Item: {items}')
 
     if not items:
-        return None
+        return []
 
     return parse_categories(items[0])
+
 
 def parse_categories(movie):
     categories = set()
