@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-07-08T11:06:35.926Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="YrNgebmlPT5Q5T25d-bh" version="24.6.4" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-08T12:26:18.766Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="6SA1y8zIRLAnQ6UE3HuC" version="24.6.4" type="github">
   <diagram name="Page-1" id="znpa9NBMzFoS2YleKbPP">
-    <mxGraphModel dx="4478" dy="2058" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="3578" dy="1611" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1145,8 +1145,14 @@
             <mxPoint y="23" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="k3HLunRBviy21vwzuMZ8-77" value="&lt;div style=&quot;&quot;&gt;&amp;nbsp;&lt;b&gt;partition:&lt;/b&gt;&amp;nbsp;userId&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp;cache&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
-          <mxGeometry x="-2183.5" y="-659" width="119.5" height="49" as="geometry" />
+        <mxCell id="k3HLunRBviy21vwzuMZ8-77" value="&lt;div style=&quot;&quot;&gt;&amp;nbsp;&lt;b&gt;partition:&lt;/b&gt;&amp;nbsp;userId&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp;cache = [directory#rating]&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="-2219" y="-659" width="155" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="k3HLunRBviy21vwzuMZ8-82" value="&lt;div style=&quot;&quot;&gt;Returns top X best fitting movies&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="-2173" y="-745" width="126" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="k3HLunRBviy21vwzuMZ8-84" value="&lt;div style=&quot;&quot;&gt;Return all movies in the best fitting order&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="833.5" y="1884" width="90" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
