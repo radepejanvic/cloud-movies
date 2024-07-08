@@ -18,7 +18,7 @@ constructor(private authService: AuthService){}
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
 
-    const accessToken: any = this.authService.accessToken;
+    const accessToken: any = this.authService.getAccessToken()!;
 
     if (req.headers.get('skip')) return next.handle(req);
 

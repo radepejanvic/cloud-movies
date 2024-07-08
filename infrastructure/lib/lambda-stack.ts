@@ -50,7 +50,7 @@ export class LambdaStack extends cdk.Stack {
                     apigatewayv2.CorsHttpMethod.POST,
                     apigatewayv2.CorsHttpMethod.OPTIONS,
                 ],
-                allowOrigins: ["http://localhost:4200"],
+                allowOrigins: ["http://localhost:4200", "https://d1mobe0bs79emz.cloudfront.net"],
                 allowHeaders: ["Content-Type", "Authorization"],
                 allowCredentials: true,
                 exposeHeaders: ["*"],
