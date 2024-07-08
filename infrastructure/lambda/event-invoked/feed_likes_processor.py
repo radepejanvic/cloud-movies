@@ -21,15 +21,15 @@ def handler(event, context):
         for record in event['Records']: 
 
             if record['eventName'] == 'REMOVE':
-                continue
-
-            new = record['dynamodb']['NewImage']
-            movie = get_movie(new['directory'])
+                image = record['dynamodb']['OldImage']
+            else: 
+                image = record['dynamodb']['NewImage']
+            movie = get_movie(image['directory'])
 
             response = sqs.send_message(
                 QueueUrl=queue_url,
                 MessageBody=json.dumps({
-                    'userId': new['userId']['S'], 
+                    'userId': image['userId']['S'], 
                     'actors': movie['actors'],
                     'directors': movie['directors'],
                     'genres': movie['genres'],
@@ -45,18 +45,21 @@ def handler(event, context):
 
 
 def get_points(record):
-    new = record['dynamodb']['NewImage']
-
     if record['eventName'] == 'INSERT': 
-        return 1 if new['liked'] else -1
+        new = record['dynamodb']['NewImage']
+        return 1 if new['liked']['BOOL'] else -1
     
+    if record['eventName'] == 'REMOVE':
+        old = record['dynamodb']['OldImage']
+        return -1 if old['liked']['BOOL'] else 1
+    
+    new = record['dynamodb']['NewImage']
     old = record['dynamodb']['OldImage']
-    if record['eventName'] == 'REMOVE': 
-        return -1 if old['liked'] else 1
     
-    if new['liked']: 
+    if new['liked']['BOOL'] and not old['liked']['BOOL']: 
         return 2 
-    return -2
+    elif not new['liked']['BOOL'] and old['liked']['BOOL']: 
+        return -2
 
 
 def get_movie(directory): 

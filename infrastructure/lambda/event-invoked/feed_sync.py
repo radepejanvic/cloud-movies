@@ -17,14 +17,11 @@ def handler(event, context):
             message = json.loads(record['body'])
             # message = record['body']
             keys = get_keys(message)
-
             logging.info(keys)
 
             existing_keys = check_existing_items(keys)
             new_keys = keys - existing_keys
 
-            logging.info(new_keys)
-            
             if new_keys: 
                 write_new_items(new_keys, message['points'])
                 
@@ -66,6 +63,7 @@ def check_existing_items(keys):
 
 
 def update_existing_items(keys, points): 
+    operation = "+" if points > 0 else "-"
     for user_id, category in keys: 
         response = dynamodb.update_item(
             TableName=feed_table,
@@ -73,7 +71,7 @@ def update_existing_items(keys, points):
                 'userId': {'S': user_id},
                 'category': {'S': category}
             },
-            UpdateExpression='SET points = points + :inc, relevance = :relevance',
+            UpdateExpression=f'SET points = points {operation} :inc, relevance = :relevance',
             ExpressionAttributeValues={
                 ':inc': {'N': str(points)}, 
                 ':relevance': {'S': datetime.utcnow().isoformat()}
