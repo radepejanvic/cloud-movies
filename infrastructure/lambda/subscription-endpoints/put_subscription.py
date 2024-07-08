@@ -20,12 +20,10 @@ def handler(event, context):
             Key={
                 'userId': {'S': body['userId']}
             },
-            UpdateExpression='SET email = :email, actors = :actors, directors = :directors, genres = :genres',
+            UpdateExpression='SET email = :email, topics = :topics',
             ExpressionAttributeValues={
                 ':email': {'S': body['email']},
-                ':actors': {'SS': body['actors'] if not body['actors'] == [] else [' ']},
-                ':directors': {'SS': body['directors'] if not body['directors'] == [] else [' ']},
-                ':genres': {'SS': body['genres'] if not body['genres'] == [] else [' ']}
+                ':topics': {'SS': body['topics'] if not body['topics'] == [] else [' ']},
             },
             ReturnValues='ALL_NEW'
         )
