@@ -16,12 +16,8 @@ interface TranscoderStackProps extends cdk.StackProps {
 }
 
 export class TranscoderStack extends cdk.Stack {
-    constructor(scope: Construct, id: string, props?: TranscoderStackProps) {
+    constructor(scope: Construct, id: string, props: TranscoderStackProps) {
         super(scope, id, props);
-
-        if (!props?.bucketName) {
-            throw new Error('Prop bucketName is required.');
-        }
 
         const bucket = s3.Bucket.fromBucketName(this, 'ImportedBucket', props.bucketName);
 
@@ -53,6 +49,7 @@ export class TranscoderStack extends cdk.Stack {
         });
 
         bucket.grantRead(addToQueue);
+        bucket.grantPut(addToQueue);
         props.metadata.grantReadWriteData(addToQueue);
 
         addToQueue.addEventSource(new S3EventSourceV2(bucket, {

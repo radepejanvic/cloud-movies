@@ -5,6 +5,7 @@ import urllib.parse
 import re
 import logging
 from decimal import Decimal
+import logging
 
 s3 = boto3.client('s3')
 sqs = boto3.client('sqs')
@@ -14,6 +15,9 @@ queue_url = os.environ['QUEUE_URL']
 dynamodb = boto3.resource('dynamodb')
 table_name = os.environ['METADATA_TABLE']
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 def handler(event, context):
     
     try: 
@@ -22,6 +26,7 @@ def handler(event, context):
     
             # Create transcoded replica metadata entry
             if is_replica(key): 
+                logging.info(f'Replica: {key}')
                 replicate_metadata(key)
 
                 return {
@@ -30,6 +35,7 @@ def handler(event, context):
                     } 
             
             # Complete metadata entry for key
+            logging.info(f'Original: {key}')
             complete_metadata(key)
             
             # Send transcoder resolutions list 
@@ -79,6 +85,7 @@ def complete_metadata(key):
         }
     )
 
+
 def replicate_metadata(key):
     response = s3.head_object(Bucket=bucket_name, Key=key)
 
@@ -95,9 +102,7 @@ def replicate_metadata(key):
         'size': Decimal(str(size)), 
         'createdAt': timestamp, 
         'lastModified': timestamp,
-        'mainReplica': get_main_replica(key)
     })
-    
 
 
 def split_key(key):
@@ -111,19 +116,10 @@ def is_replica(key):
     tags = s3.get_object_tagging(Bucket=bucket_name, Key=key)
 
     for tag in tags['TagSet']: 
-        if tag['Key'] == 'MainReplica': 
+        if tag['Key'] == 'Replica': 
             return True
 
     return False
-
-def get_main_replica(key):
-    response = s3.get_object_tagging(Bucket=bucket_name, Key=key)
-    
-    for tag in response['TagSet']:
-        if tag['Key'] == 'MainReplica':
-            return tag['Value']
-    
-    return None
 
 
 def get_expected_resolutions(resolution):
