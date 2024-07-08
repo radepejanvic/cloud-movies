@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-07-08T20:14:09.946Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="AjTAaZJfLKfMwidtHOp0" version="24.6.4" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-08T20:25:38.680Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="ApVc5SPH6JV9uenpeRzW" version="24.6.4" type="github">
   <diagram name="Page-1" id="znpa9NBMzFoS2YleKbPP">
-    <mxGraphModel dx="11806" dy="5700" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="10263" dy="4933" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -313,8 +313,8 @@
         <mxCell id="a5mPWVhoy3-nCRkhm6n--291" value="put the transcoded file into movies/movie-name/resolution" style="shape=note;size=20;whiteSpace=wrap;html=1;" parent="a5mPWVhoy3-nCRkhm6n--284" vertex="1">
           <mxGeometry x="314" y="331.5" width="179" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="4q0Eoj-Lvp2xT61tXLlo-1" value="Transcoded replica tags:&amp;nbsp;&amp;nbsp;&lt;br&gt;MainReplica = InitialResolution" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" parent="a5mPWVhoy3-nCRkhm6n--284" vertex="1">
-          <mxGeometry x="314" y="432" width="247" height="55" as="geometry" />
+        <mxCell id="4q0Eoj-Lvp2xT61tXLlo-1" value="Transcoded replicas are tagged to prevent recursion&amp;nbsp;&amp;nbsp;&lt;br&gt;&lt;b&gt;Replica = True&lt;/b&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" parent="a5mPWVhoy3-nCRkhm6n--284" vertex="1">
+          <mxGeometry x="314" y="432" width="162" height="63" as="geometry" />
         </mxCell>
         <mxCell id="a5mPWVhoy3-nCRkhm6n--292" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="a5mPWVhoy3-nCRkhm6n--90" target="a5mPWVhoy3-nCRkhm6n--246" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -461,8 +461,8 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ywkyJRlHClKqvrW9Rvdm-109" value="&lt;div style=&quot;text-align: left;&quot;&gt;&amp;nbsp;&lt;b&gt;partition:&lt;/b&gt;&amp;nbsp;userId&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&amp;nbsp;[actors]&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;[directors]&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;[genres]&lt;/span&gt;&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1196" y="1304" width="100" height="98" as="geometry" />
+        <mxCell id="ywkyJRlHClKqvrW9Rvdm-109" value="&lt;div style=&quot;text-align: left;&quot;&gt;&amp;nbsp;&lt;b&gt;partition:&lt;/b&gt;&amp;nbsp;userId&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&amp;nbsp;topics&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1233" y="1262" width="99" height="69" as="geometry" />
         </mxCell>
         <mxCell id="ywkyJRlHClKqvrW9Rvdm-112" value="&lt;div style=&quot;&quot;&gt;&amp;nbsp;&lt;b&gt;partition:&lt;/b&gt;&amp;nbsp;userID&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp;&lt;b&gt;sort:&amp;nbsp;&lt;/b&gt;timestamp&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp;&lt;b&gt;GSI:&lt;/b&gt;&amp;nbsp;movie&amp;nbsp;&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="1149" y="108" width="109" height="83" as="geometry" />
@@ -645,7 +645,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="xv3FGvyUVecK8OyIPnQJ-9" value="&lt;div&gt;&amp;nbsp;size&lt;/div&gt;&lt;div&gt;&amp;nbsp;createdAt&lt;/div&gt;&lt;div&gt;&amp;nbsp;lastMofied&lt;/div&gt;&lt;div&gt;&amp;nbsp;uploaded = TRUE&lt;br&gt;&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-          <mxGeometry x="-1154" y="1383" width="113" height="70" as="geometry" />
+          <mxGeometry x="-1154" y="1376.5" width="113" height="70" as="geometry" />
         </mxCell>
         <mxCell id="xv3FGvyUVecK8OyIPnQJ-11" value="&lt;div style=&quot;&quot;&gt;&amp;nbsp;&lt;b&gt;partition:&lt;/b&gt; directory&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp;&lt;b&gt;sort: &lt;/b&gt;resolution&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp;type&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp;thumbnail&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp;&lt;b&gt;GSI:&lt;/b&gt;&amp;nbsp;&lt;/div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp;title&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp;description&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp;actors&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp;directors&lt;/span&gt;&lt;br&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp;genres&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="1040" y="-187" width="130" height="163" as="geometry" />
@@ -899,9 +899,6 @@
         <mxCell id="EyocAmLN93WAHFbA3dTI-32" value="&lt;span style=&quot;font-size: 18px;&quot;&gt;Get feed&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="EyocAmLN93WAHFbA3dTI-30" vertex="1">
           <mxGeometry x="14" y="160" width="87" height="34" as="geometry" />
         </mxCell>
-        <mxCell id="EyocAmLN93WAHFbA3dTI-37" value="&lt;b&gt;action,horror, ...&lt;/b&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="-1131" y="1218" width="112" height="97" as="geometry" />
-        </mxCell>
         <mxCell id="EyocAmLN93WAHFbA3dTI-42" value="" style="group" parent="1" vertex="1" connectable="0">
           <mxGeometry x="682.5" y="962" width="110" height="118" as="geometry" />
         </mxCell>
@@ -1148,8 +1145,8 @@
         <mxCell id="k3HLunRBviy21vwzuMZ8-82" value="&lt;div style=&quot;&quot;&gt;Returns top X best fitting movies&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="-2017" y="-727" width="126" height="56" as="geometry" />
         </mxCell>
-        <mxCell id="k3HLunRBviy21vwzuMZ8-84" value="&lt;div style=&quot;&quot;&gt;Return all movies in the best fitting order&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-          <mxGeometry x="579" y="1981" width="90" height="80" as="geometry" />
+        <mxCell id="k3HLunRBviy21vwzuMZ8-84" value="&lt;div style=&quot;&quot;&gt;Returns all movies in the best fitting order&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="594.5" y="1963" width="95" height="77" as="geometry" />
         </mxCell>
         <mxCell id="k3HLunRBviy21vwzuMZ8-94" value="" style="sketch=0;html=1;aspect=fixed;strokeColor=none;shadow=0;align=center;fillColor=#2D9C5E;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;shape=mxgraph.gcp2.check" parent="1" vertex="1">
           <mxGeometry x="-10" y="217" width="100" height="80" as="geometry" />
