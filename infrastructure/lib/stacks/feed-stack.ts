@@ -128,7 +128,7 @@ export class FeedStack extends cdk.Stack {
             code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda/metadata-endpoints')),
             environment: {
                 FEED_TABLE: props.feed.tableName,
-                METADATA_TABLE: props.feed.tableName
+                METADATA_TABLE: props.metadata.tableName
             }
         });
 
