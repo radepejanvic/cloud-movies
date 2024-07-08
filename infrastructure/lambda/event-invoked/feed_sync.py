@@ -16,7 +16,6 @@ def handler(event, context):
         for record in event['Records']:
             message = json.loads(record['body'])
             # message = record['body']
-
             keys = get_keys(message)
 
             logging.info(keys)
@@ -31,7 +30,6 @@ def handler(event, context):
                 
             if existing_keys: 
                 update_existing_items(existing_keys, message['points'])
-                
 
     except Exception as e: 
         print('Error', e)
@@ -61,7 +59,6 @@ def check_existing_items(keys):
     logging.info(response)
 
     existing_keys = set()
-
     for item in response['Responses'][feed_table]:
         existing_keys.add((item['userId']['S'], item['category']['S']))
 

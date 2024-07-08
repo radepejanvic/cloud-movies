@@ -29,7 +29,7 @@ def handler(event, context):
             response = sqs.send_message(
                 QueueUrl=queue_url,
                 MessageBody=json.dumps({
-                    'userId': new['userId'], 
+                    'userId': new['userId']['S'], 
                     'actors': movie['actors'],
                     'directors': movie['directors'],
                     'genres': movie['genres'],

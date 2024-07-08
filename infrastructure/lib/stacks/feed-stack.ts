@@ -114,13 +114,37 @@ export class FeedStack extends cdk.Stack {
         });
 
         feedSync.addEventSource(new eventsources.SqsEventSource(queue, {
-            batchSize: 10,
-            maxBatchingWindow: cdk.Duration.minutes(5),
+            batchSize: 5,
+            maxBatchingWindow: cdk.Duration.seconds(30),
             reportBatchItemFailures: true
         }));
 
         queue.grantConsumeMessages(feedSync);
         props.feed.grantReadWriteData(feedSync);
+
+        const getFeed = new lambda.Function(this, 'GetFeedLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'get_feed.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda/metadata-endpoints')),
+            environment: {
+                FEED_TABLE: props.feed.tableName,
+                METADATA_TABLE: props.feed.tableName
+            }
+        });
+
+        props.feed.grantReadData(getFeed);
+        props.metadata.grantReadData(getFeed);
+
+        const getFeedIntegration = new HttpLambdaIntegration(
+            "GedFeed",
+            getFeed
+        );
+        props.api.addRoutes({
+            path: "/get-feed",
+            methods: [apigatewayv2.HttpMethod.GET],
+            integration: getFeedIntegration,
+            authorizer: props.httpAuthorizer,
+        });
     }
 }
 
