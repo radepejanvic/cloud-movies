@@ -43,7 +43,7 @@ export class MovieDetailsComponent implements OnInit{
       this.uuid = params['movie_name'].split('-')[1];
     });
 
-    this.userRole = this.authService.userRole;
+    this.userRole = this.authService.getUserRole()!;
 
   // this.movieName = "TDF-1111";
   // this.movie = this.movieName.split('-')[0];
@@ -82,17 +82,19 @@ export class MovieDetailsComponent implements OnInit{
     }
    })
 
-   this.movieService.isLiked(this.authService.username, this.movieName).subscribe({
-    next: result => {
-      if(result.liked.BOOL){
-        this.isLiked = true;
-      }else{
-        this.isDisliked = true;
+   if(this.userRole === 'BasicUser'){
+     this.movieService.isLiked(this.authService.getUsername()!, this.movieName).subscribe({
+      next: result => {
+        if(result.liked.BOOL){
+          this.isLiked = true;
+        }else{
+          this.isDisliked = true;
+        }
+      },
+      error: (err: HttpErrorResponse) => {
       }
-    },
-    error: (err: HttpErrorResponse) => {
-    }
-   })
+     })
+   }
 
   }
 
@@ -193,7 +195,7 @@ export class MovieDetailsComponent implements OnInit{
   }
 
   postLike(isLiked: boolean){
-    this.movieService.postLike(this.authService.username, this.movieName, isLiked).subscribe({
+    this.movieService.postLike(this.authService.getUsername()!, this.movieName, isLiked).subscribe({
       next: result => {
         console.log("Successfully posted isLiked")
       }
@@ -201,7 +203,7 @@ export class MovieDetailsComponent implements OnInit{
   }
 
   deleteLike(){
-    this.movieService.deleteLike(this.authService.username, this.movieName).subscribe({
+    this.movieService.deleteLike(this.authService.getUsername()!, this.movieName).subscribe({
 
     });
   }

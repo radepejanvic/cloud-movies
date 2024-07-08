@@ -10,10 +10,10 @@ import { UserSubscriptionsComponent } from './movie/user-subscriptions/user-subs
 const routes: Routes = [
   // {path : "home", component : HomeComponent,},
   { path: '', redirectTo: 'feed', pathMatch: 'full' },
-  {path : "upload-movie", component : UploadMovieComponent, canActivate: [AuthGuard], data: {role: ['BasicUser']}},
+  {path : "upload-movie", component : UploadMovieComponent, canActivate: [AuthGuard], data: {role: ['Admin']}},
   {path : "movie-details", component : MovieDetailsComponent},
   {path : "feed", component : MovieFeedComponent},
-  {path : "update-movie", component : UpdateMovieComponent, canActivate: [AuthGuard], data: {role: ['BasicUser']}},
+  {path : "update-movie", component : UpdateMovieComponent, canActivate: [AuthGuard], data: {role: ['Admin']}},
   {path : "subscriptions", component : UserSubscriptionsComponent, canActivate: [AuthGuard], data: {role: ['BasicUser']}},
 ];
 
