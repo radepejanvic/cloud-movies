@@ -38,7 +38,7 @@ export class UploadMovieComponent implements OnInit{
   videoWidth: number = 0;
   videoHeight: number = 0;
   
-  predefinedGenres: string[] = ["Action", "Comedy", "Thriller", "Drama", "Horror", "Sci-Fi", "Romance"];
+  predefinedGenres: string[] = ["Action", "Comedy", "Thriller", "Drama", "Horror", "Sci-Fi", "Romance", "Crime"];
 
   constructor(private http: HttpClient, 
     private authService: AuthService,
@@ -254,29 +254,27 @@ export class UploadMovieComponent implements OnInit{
   }
 
   getVideoResolution(): string {
-    if (!this.videoWidth || !this.videoHeight) {
-      return "";
-    }
+    const tolerance = 0.05; // 5% tolerance
   
-    if (this.videoWidth >= 3840 && this.videoHeight >= 2160) {
+    if (this.isWithinTolerance(this.videoWidth, 3840, tolerance) && this.isWithinTolerance(this.videoHeight, 2160, tolerance)) {
       return "2160p";
-    } else if (this.videoWidth >= 2560 && this.videoHeight >= 1440) {
+    } else if (this.isWithinTolerance(this.videoWidth, 2560, tolerance) && this.isWithinTolerance(this.videoHeight, 1440, tolerance)) {
       return "1440p";
-    } else if (this.videoWidth >= 1920 && this.videoHeight >= 1080) {
+    } else if (this.isWithinTolerance(this.videoWidth, 1920, tolerance) && this.isWithinTolerance(this.videoHeight, 1080, tolerance)) {
       return "1080p";
-    } else if (this.videoWidth >= 1280 && this.videoHeight >= 720) {
+    } else if (this.isWithinTolerance(this.videoWidth, 1280, tolerance) && this.isWithinTolerance(this.videoHeight, 720, tolerance)) {
       return "720p";
-    } else if (this.videoWidth >= 854 && this.videoHeight >= 480) {
+    } else if (this.isWithinTolerance(this.videoWidth, 854, tolerance) && this.isWithinTolerance(this.videoHeight, 480, tolerance)) {
       return "480p";
-    } else if (this.videoWidth >= 640 && this.videoHeight >= 360) {
+    } else if (this.isWithinTolerance(this.videoWidth, 640, tolerance) && this.isWithinTolerance(this.videoHeight, 360, tolerance)) {
       return "360p";
-    } else if (this.videoWidth >= 426 && this.videoHeight >= 240) {
-      return "240p";
-    } else if (this.videoWidth >= 256 && this.videoHeight >= 144) {
-      return "144p";
     } else {
-      return ""; 
+      return "240p";
     }
+  }
+  
+  isWithinTolerance(value: number, target: number, tolerance: number): boolean {
+    return value >= target * (1 - tolerance) && value <= target * (1 + tolerance);
   }
 
 }

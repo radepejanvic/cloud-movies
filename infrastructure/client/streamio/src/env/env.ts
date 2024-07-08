@@ -19,4 +19,5 @@ export const environment = {
     getSubscription : `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/get-subscription`,
     postSubscription : `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/post-subscription`,
     putSubscription : `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/put-subscription`,
+    getFeed : `https://${apiGateway}.execute-api.eu-central-1.amazonaws.com/get-feed`,
 }

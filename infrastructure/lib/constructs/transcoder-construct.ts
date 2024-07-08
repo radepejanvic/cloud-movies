@@ -29,7 +29,7 @@ export class Transcoder extends Construct {
             runtime: lambda.Runtime.PYTHON_3_9,
             handler: 'transcode.handler',
             code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda')),
-            timeout: cdk.Duration.seconds(300),
+            timeout: cdk.Duration.minutes(15),
             architecture: lambda.Architecture.ARM_64,
             environment: {
                 BUCKET_NAME: props.bucket.bucketName,
@@ -44,7 +44,7 @@ export class Transcoder extends Construct {
 
         const transcodeJob = new tasks.LambdaInvoke(this, 'TranscoderJob', {
             lambdaFunction: transcode,
-            timeout: cdk.Duration.seconds(300),
+            timeout: cdk.Duration.minutes(15),
             payload: sfn.TaskInput.fromObject({
                 input: sfn.JsonPath.stringAt('$.input')
             }),
@@ -59,7 +59,7 @@ export class Transcoder extends Construct {
 
         const stateMachine = new sfn.StateMachine(this, 'TranscoderStateMachine', {
             definition: definition,
-            timeout: cdk.Duration.minutes(5),
+            timeout: cdk.Duration.minutes(30),
         })
 
         transcode.grantInvoke(stateMachine);
@@ -75,8 +75,8 @@ export class Transcoder extends Construct {
         });
 
         trigger.addEventSource(new SqsEventSource(props.queue, {
-            batchSize: 10,
-            maxBatchingWindow: cdk.Duration.minutes(5),
+            batchSize: 1,
+            maxBatchingWindow: cdk.Duration.seconds(30),
             reportBatchItemFailures: true
         }));
 

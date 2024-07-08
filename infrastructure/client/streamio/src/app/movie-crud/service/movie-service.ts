@@ -187,4 +187,12 @@ export class MovieService {
         });
     }
 
+    getFeed(username: string){
+        let params = new HttpParams()
+        .set('userId', username);
+
+        const url = environment.getFeed;
+        return this.http.get<MovieDB[]>(url, { params });
+    }
+
 }
