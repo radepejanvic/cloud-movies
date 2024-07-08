@@ -103,5 +103,15 @@ export class CognitoPool extends Construct {
                 ],
             })
         );
+
+        const basicUserGroup = new cognito.CfnUserPoolGroup(this, 'BasicUserGroup', {
+            groupName: 'BasicUser',
+            userPoolId: cognitoPool.userPoolId,
+        });
+
+        const adminGroup = new cognito.CfnUserPoolGroup(this, 'AdminGroup', {
+            groupName: 'Admin',
+            userPoolId: cognitoPool.userPoolId,
+        });
     }
 }

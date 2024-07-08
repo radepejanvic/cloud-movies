@@ -5,7 +5,7 @@
         Your browser does not support the video tag.
     </video>
     <div class="resolution-container">
-        <div class="like-container">
+        <div class="like-container" *ngIf="userRole === 'BasicUser' ">
             <div class="like-container">
                 <img
                   src="../../../assets/images/like.png"
@@ -24,10 +24,10 @@
             </div>
             
         </div>
-        <button *ngIf="userRole === 'BasicUser' "  (click)="updateMovie()">Update</button>
-        <button *ngIf="userRole === 'BasicUser' " class="red-button" (click)="deleteMovie()">Delete</button>
+        <button *ngIf="userRole === 'Admin' "  (click)="updateMovie()">Update</button>
+        <button *ngIf="userRole === 'Admin' " class="red-button" (click)="deleteMovie()">Delete</button>
         <button class="green-button" (click)="downloadMovie()">Download</button>
-        <select (change)="changeResolution($event)" formControlName="resolution">
+        <select (change)="changeResolution($event)" >
             <option *ngFor="let resolution of resolutions" [value]="resolution.url">{{resolution.label}}</option>
         </select>
     </div>

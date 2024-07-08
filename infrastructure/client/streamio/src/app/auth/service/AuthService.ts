@@ -6,17 +6,7 @@ import { AuthUser, getCurrentUser, signOut, fetchAuthSession, AuthTokens } from 
 })
 export class AuthService {
 
-  userRole = "";
-  accessToken : string = "";
-  username: string = "";
-  email: string = "";
-
-  constructor() {
-    this.accessToken = this.getLocalStorageItemByKeySubstring('accessToken');
-    this.username = this.getLocalStorageItemByKeySubstring('LastAuthUser');
-    this.email = JSON.parse(this.getLocalStorageItemByKeySubstring('signInDetails')).loginId;
-    this.userRole = this.getUserRole()!;
-  }
+  constructor() {}
 
   async getCurrentUser(): Promise<AuthUser> {
     return await getCurrentUser();
@@ -31,14 +21,27 @@ export class AuthService {
     return cognitoToken?.idToken?.payload['name']?.toString();
   }
 
-  async getAccessToken(): Promise<string | undefined> {
-    let cognitoToken = await (await fetchAuthSession()).tokens;
-    return cognitoToken?.accessToken.toString();
-  }
+  // async getAccessToken(): Promise<string | undefined> {
+  //   let cognitoToken = await (await fetchAuthSession()).tokens;
+  //   return cognitoToken?.accessToken.toString();
+  // }
 
   getUserRole(): string | undefined {
     return this.extractRoleFromJwt(this.getLocalStorageItemByKeySubstring('accessToken')!);
   }
+
+  getAccessToken(): string | undefined {
+    return this.getLocalStorageItemByKeySubstring('accessToken');
+  }
+
+  getUsername(): string | undefined {
+    return this.getLocalStorageItemByKeySubstring('LastAuthUser');
+  }
+
+  getEmail(): string | undefined {
+    return JSON.parse(this.getLocalStorageItemByKeySubstring('signInDetails')).loginId;
+  }
+
 
   signOut() {
     signOut();

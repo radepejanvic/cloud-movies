@@ -34,7 +34,7 @@ export class UserSubscriptionsComponent {
         })
 
         // this.movieService.getSubscriptions(this.authService.username).subscribe({
-          this.movieService.getSubscriptions(this.authService.username).subscribe({
+          this.movieService.getSubscriptions(this.authService.getUsername()!).subscribe({
           next: result => {
             this.hasSubscription = true;
             console.log(result)
@@ -69,13 +69,13 @@ export class UserSubscriptionsComponent {
     selectedTopics.forEach(topic => topics.push(topic.name));
 
     if(this.hasSubscription){
-      this.movieService.putSubscription(this.authService.username, this.authService.email, topics).subscribe({
+      this.movieService.putSubscription(this.authService.getUsername()!, this.authService.getEmail()!, topics).subscribe({
         next: result => {
           this.router.navigate(['feed']);
         }
       })
     }else{
-      this.movieService.postSubscription(this.authService.username, this.authService.email, topics).subscribe({
+      this.movieService.postSubscription(this.authService.getUsername()!, this.authService.getEmail()!, topics).subscribe({
         next: result => {
           this.router.navigate(['feed']);
         }

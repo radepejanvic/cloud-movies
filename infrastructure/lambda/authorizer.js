@@ -1,22 +1,22 @@
 const { CognitoJwtVerifier } = require('aws-jwt-verify');
 
 const mapGroupsToPaths = [
-  { path: '/POST/upload-url', group: 'BasicUser' },
-  { path: '/GET/preview-url', group: 'BasicUser' },
-  { path: '/GET/download-url', group: 'BasicUser' },
-  { path: '/DELETE/delete-movie', group: 'BasicUser' },
-  { path: '/GET/get-movie', group: 'BasicUser' },
-  { path: '/GET/query-movies', group: 'BasicUser' },
-  { path: '/PUT/put-movie', group: 'BasicUser' },
-  { path: '/POST/post-subscription', group: 'BasicUser' },
-  { path: '/PUT/put-subscription', group: 'BasicUser' },
-  { path: '/GET/movies', group: 'BasicUser' },
-  { path: '/GET/get-subscription', group: 'BasicUser' },
-  { path: '/GET/get-topics', group: 'BasicUser' },
-  { path: '/POST/post-like', group: 'BasicUser' },
-  { path: '/GET/get-like', group: 'BasicUser' },
-  { path: '/DELETE/delete-like', group: 'BasicUser' },
-  { path: '/GET/get-feed', group: 'BasicUser' },
+  { path: '/POST/upload-url', groups: ['Admin'] },
+  { path: '/GET/preview-url', groups: ['BasicUser', 'Admin'] },
+  { path: '/GET/download-url', groups: ['BasicUser', 'Admin'] },
+  { path: '/DELETE/delete-movie', groups: ['Admin'] },
+  { path: '/GET/get-movie', groups: ['BasicUser', 'Admin'] },
+  { path: '/GET/query-movies', groups: ['BasicUser', 'Admin'] },
+  { path: '/PUT/put-movie', groups: ['Admin'] },
+  { path: '/POST/post-subscription', groups: ['BasicUser'] },
+  { path: '/PUT/put-subscription', groups: ['BasicUser'] },
+  { path: '/GET/movies', groups: ['BasicUser', 'Admin'] },
+  { path: '/GET/get-subscription', groups: ['BasicUser'] },
+  { path: '/GET/get-topics', groups: ['BasicUser'] },
+  { path: '/POST/post-like', groups: ['BasicUser'] },
+  { path: '/GET/get-like', groups: ['BasicUser'] },
+  { path: '/DELETE/delete-like', groups: ['BasicUser'] },
+  { path: '/GET/get-feed', groups: ['BasicUser'] },
 ];
 
 function extractPathFromMethodArn(methodArn) {
@@ -102,7 +102,12 @@ exports.handler = async function (event) {
     (config) => requestPath === config.path
   );
   const userGroups = payload['cognito:groups'];
-  if (userGroups.includes(matchingPathConfig.group)) {
+
+  const isAuthorized = userGroups.some((group) =>
+    matchingPathConfig.groups.includes(group)
+  );
+
+  if (isAuthorized) {
     console.log("GOOOOOOOOOOD!");
     console.log(generatePolicy(payload.sub, 'Allow', event.methodArn));
     return {

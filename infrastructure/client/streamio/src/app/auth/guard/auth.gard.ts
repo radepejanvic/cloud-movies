@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
     | UrlTree {
 
 
-    const userRole :string = this.authService.userRole;
+    const userRole :string = this.authService.getUserRole()!;
     if (userRole == '') {
       this.authService.signOut();
       return false;

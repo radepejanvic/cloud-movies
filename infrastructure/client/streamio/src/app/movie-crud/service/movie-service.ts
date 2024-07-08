@@ -54,7 +54,7 @@ export class MovieService {
             .set('movie_name', movie)
             .set('uuid', uuid)
             .set('resolution', resolution)
-            .set('user', this.authService.username);
+            .set('user', this.authService.getUsername()!);
         
         const url = environment.getPreviewUrl;
         return this.http.get<any>(url, { params });
@@ -65,7 +65,7 @@ export class MovieService {
             .set('movie_name', movie)
             .set('uuid', uuid)
             .set('resolution', resolution)
-            .set('user', this.authService.username);
+            .set('user', this.authService.getUsername()!);
         
         const url = environment.getDownloadUrl;
         return this.http.get<any>(url, { params });
