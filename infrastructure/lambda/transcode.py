@@ -2,6 +2,7 @@ import os
 import boto3 # type: ignore
 import subprocess
 import logging
+import uuid
 
 s3 = boto3.client('s3')
 bucket_name = os.environ['BUCKET_NAME']
@@ -9,16 +10,20 @@ bucket_name = os.environ['BUCKET_NAME']
 def handler(event, context):
 
     ffmpeg_path = '/opt/bin/ffmpeg'
-
     input = event['input']
+
+    logging.info(f'Transcode job input: {input}')
 
     input_key = input['Object']
     res = input['Resolution']
-    # main_replica = input['MainReplica']
+
     output_key = f"{os.path.split(input_key)[0]}/{res}.mp4"
 
-    input_file_path = f"/tmp/{os.path.basename(input_key)}"
-    output_file_path = f"/tmp/output.mp4"
+    temp_key = uuid.uuid4()
+    logging.info(f'UUID: {temp_key}')
+
+    input_file_path = f"/tmp/{temp_key}"
+    output_file_path = f"/tmp/out{temp_key}.mp4"
 
     try:
         s3.download_file(bucket_name, input_key, input_file_path)
@@ -47,6 +52,20 @@ def handler(event, context):
         # s3.upload_file(output_file_path, bucket_name, output_key)
         with open(output_file_path, 'rb') as file_data:
             s3.put_object(Bucket=bucket_name, Key=output_key, Body=file_data)
+
+        response = s3.put_object_tagging(
+            Bucket=bucket_name,
+            Key=output_key,
+            Tagging={
+                'TagSet': [
+                    {
+                        'Key': 'Replica',
+                        'Value': 'True'
+                    },
+                ]
+            }
+        )
+        logging.info(f'{output_key}: {response}')
 
         # Handle successful execution
         output_message = f"ffmpeg output: {result.stdout}"
