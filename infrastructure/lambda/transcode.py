@@ -44,7 +44,9 @@ def handler(event, context):
                 'body': error_message
             }
         
-        s3.upload_file(output_file_path, bucket_name, output_key)
+        # s3.upload_file(output_file_path, bucket_name, output_key)
+        with open(output_file_path, 'rb') as file_data:
+            s3.put_object(Bucket=bucket_name, Key=output_key, Body=file_data)
 
         # Handle successful execution
         output_message = f"ffmpeg output: {result.stdout}"

@@ -47,15 +47,15 @@ def get_metadata(feed):
         TableName=metadata_table,
         FilterExpression='attribute_exists(title)', 
         # TODO: Comment ProjectionExpression out if the cache isnt implemented 
-        ProjectionExpression='directory, resolution, actors, directors, genres, createdAt'
+        # ProjectionExpression='directory, resolution, actors, directors, genres, createdAt'
     )
     items = response.get('Items', [])
     for item in items: 
         # TODO: Comment del out if the cache isnt implemented 
         item['rating'] = calculate_rating(parse_categories(item), feed)
-        del item['actors']
-        del item['directors']
-        del item['genres']
+        # del item['actors']
+        # del item['directors']
+        # del item['genres']
 
     return sorted(items, key=lambda x: x.get('rating', 0), reverse=True)
 

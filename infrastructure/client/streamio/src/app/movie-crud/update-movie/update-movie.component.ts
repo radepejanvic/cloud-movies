@@ -57,7 +57,7 @@ export class UpdateMovieComponent {
   selectedGenre: string = "";
   genres: string[] = [];
 
-  predefinedGenres: string[] = ["Action", "Comedy", "Thriller", "Drama", "Horror", "Sci-Fi", "Romance"];
+  predefinedGenres: string[] = ["Action", "Comedy", "Thriller", "Drama", "Horror", "Sci-Fi", "Romance", "Crime"];
 
   onThumbnailSelected(event: any) {
     const file: File = event.target.files[0];
