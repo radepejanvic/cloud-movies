@@ -83,25 +83,25 @@ export class FeedStack extends cdk.Stack {
             retryAttempts: 10
         }));
 
-        // const feedSubs = new lambda.Function(this, 'FeedSubsLambda', {
-        //     runtime: lambda.Runtime.PYTHON_3_9,
-        //     handler: 'feed_subs_processor.handler',
-        //     code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda/event-invoked')),
-        //     environment: {
-        //         SUBSCRIPTIONS_TABLE: props.history.tableName,
-        //         FEED_TABLE: props.feed.tableName
-        //     }
-        // });
+        const feedSubs = new lambda.Function(this, 'FeedSubsLambda', {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            handler: 'feed_subs_processor.handler',
+            code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda/event-invoked')),
+            environment: {
+                SUBSCRIPTIONS_TABLE: props.history.tableName,
+                QUEUE_URL: queue.queueUrl,
+            }
+        });
 
-        // props.subscriptions.grantStreamRead(feedSubs);
-        // props.feed.grantWriteData(feedSubs);
+        props.subscriptions.grantStreamRead(feedSubs);
+        queue.grantSendMessages(feedSubs);
 
-        // feedSubs.addEventSource(new eventsources.DynamoEventSource(props.subscriptions, {
-        //     startingPosition: lambda.StartingPosition.TRIM_HORIZON,
-        //     batchSize: 5,
-        //     bisectBatchOnError: true,
-        //     retryAttempts: 10
-        // }));
+        feedSubs.addEventSource(new eventsources.DynamoEventSource(props.subscriptions, {
+            startingPosition: lambda.StartingPosition.TRIM_HORIZON,
+            batchSize: 5,
+            bisectBatchOnError: true,
+            retryAttempts: 10
+        }));
 
         const feedSync = new lambda.Function(this, 'FeedSyncLambda', {
             runtime: lambda.Runtime.PYTHON_3_9,

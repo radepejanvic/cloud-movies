@@ -74,7 +74,7 @@ def calculate_rating(categories, feed):
     rating = 0
     for item in feed: 
         if item['category']['S'] in categories: 
-            # Add scaling based on item['relevance']['S']
+            # TODO: Add scaling based on item['relevance']['S']
             # relevance = (now - datetime.fromisoformat(item['relevance']['S'])).total_seconds()
             # rating += item['points']['N'] * 1/relevance
             rating += int(item['points']['N'])
