@@ -2,6 +2,7 @@ import boto3 # type: ignore
 import json
 import os
 import logging 
+from datetime import datetime
 
 dynamodb = boto3.client('dynamodb')
 table_name = os.environ['METADATA_TABLE']
@@ -18,7 +19,7 @@ def handler(event, context):
                 'directory': {'S': body['directory']},
                 'resolution': {'S': body['resolution']}
             }, 
-            UpdateExpression="SET title = :title, description = :desc, actors = :actors, directors = :directors, genres = :genres, thumbnail = :thumbnail",
+            UpdateExpression="SET title = :title, description = :desc, actors = :actors, directors = :directors, genres = :genres, thumbnail = :thumbnail, lastModified = :lastModified",
             ExpressionAttributeValues={
                 ':title': {'S': body['title']},
                 ':desc': {'S': body['description']},
@@ -26,6 +27,7 @@ def handler(event, context):
                 ':directors': {'S': body['directors']},
                 ':genres': {'S': body['genres']},
                 ':thumbnail': {'S': body['thumbnail']},
+                ':lastModified': {'S': datetime.utcnow().isoformat()},
             }
         )
         
