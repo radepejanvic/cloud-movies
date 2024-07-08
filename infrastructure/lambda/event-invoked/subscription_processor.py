@@ -42,58 +42,73 @@ def handler(event, context):
 
 
 def subscribe(image, email):
-    for item in image.get('topics', {}).get('SS', []): 
-        if item == ' ': continue
+    keys = ['genres', 'directors', 'actors']
 
-        logging.info(normalize(item))
+    for key in keys: 
+        for item in image.get(key, {}).get('SS', []): 
+            if item == ' ': continue
 
-        response = sns.subscribe(
-            TopicArn=f'arn:aws:sns:{region}:{account}:{normalize(item)}',
-            Protocol='email',
-            Endpoint=email
-        )
+            logging.info(normalize(item))
+
+            response = sns.subscribe(
+                TopicArn=f'arn:aws:sns:{region}:{account}:{normalize(item)}',
+                Protocol='email',
+                Endpoint=email
+            )
 
         logging.info(response)
 
 
 def unsubscribe(image): 
-    for item in image.get('topics', {}).get('SS', []): 
-        response = sns.list_topics()
-        topic_arn = f'arn:aws:sns:{region}:{account}:{normalize(item)}'
-        
-        logging.warning(f'response: {type(response)}')
+    keys = ['genres', 'directors', 'actors']
 
-        for topic in response['Topics']:
-            if topic['TopicArn'] == topic_arn:
-                subscriptions = sns.list_subscriptions_by_topic(TopicArn=topic_arn)
+    for key in keys: 
+        for item in image.get(key, {}).get('SS', []): 
+            response = sns.list_topics()
+            topic_arn = f'arn:aws:sns:{region}:{account}:{normalize(item)}'
+            
+            logging.warning(f'response: {type(response)}')
 
-                logging.warning(f'subscription_arn: {type(subscriptions)}')
-                logging.info(subscriptions)
+            for topic in response['Topics']:
+                if topic['TopicArn'] == topic_arn:
+                    subscriptions = sns.list_subscriptions_by_topic(TopicArn=topic_arn)
 
-                for subscription in subscriptions['Subscriptions']:
+                    logging.warning(f'subscription_arn: {type(subscriptions)}')
+                    logging.info(subscriptions)
 
-                    logging.warning(f'subscription: {type(subscription)}')
-                    logging.info(subscription)
+                    for subscription in subscriptions['Subscriptions']:
 
-                    if subscription['SubscriptionArn'] == 'PendingConfirmation': 
-                        continue
+                        logging.warning(f'subscription: {type(subscription)}')
+                        logging.info(subscription)
 
-                    try: 
-                        response = sns.unsubscribe(
-                            SubscriptionArn=subscription['SubscriptionArn']
-                        )
-                    except Exception as e: 
-                        logging.error(f'Error: {str(e)}')
-                        continue
+                        if subscription['SubscriptionArn'] == 'PendingConfirmation': 
+                            continue
 
-                    logging.info(response)
+                        try: 
+                            response = sns.unsubscribe(
+                                SubscriptionArn=subscription['SubscriptionArn']
+                            )
+                        except Exception as e: 
+                            logging.error(f'Error: {str(e)}')
+                            continue
+
+                        logging.info(response)
 
 
 
 def get_diff(old, new):
 
-    added = {'topics': {'SS': set(new['topics']['SS']) - set(old['topics']['SS'])}}
-    removed = {'topics': {'SS': set(old['topics']['SS']) - set(new['topics']['SS'])}}
+    keys = ['genres', 'directors', 'actors']
+
+    added = {key: {'SS': []} for key in keys}
+    removed = {key: {'SS': []} for key in keys}
+    
+
+    for key in keys:
+        added[key]['SS'] = list(set(new[key]['SS']) - set(old[key]['SS']))
+
+    for key in keys:
+        removed[key]['SS'] = list(set(old[key]['SS']) - set(new[key]['SS']))
 
     logging.warning(added)
     logging.warning(removed)

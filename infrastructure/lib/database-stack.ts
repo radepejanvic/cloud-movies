@@ -131,15 +131,7 @@ export class DatabaseStack extends cdk.Stack {
             tableName: "Likes",
             partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
             sortKey: { name: 'directory', type: dynamodb.AttributeType.STRING },
-            dynamoStream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
-            removalPolicy: cdk.RemovalPolicy.DESTROY
-        });
-
-        this.feed = new dynamodb.TableV2(this, 'FeedTable', {
-            tableName: "Feed",
-            partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
-            sortKey: { name: 'category', type: dynamodb.AttributeType.STRING },
-            dynamoStream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
+            dynamoStream: dynamodb.StreamViewType.NEW_IMAGE,
             removalPolicy: cdk.RemovalPolicy.DESTROY
         });
 

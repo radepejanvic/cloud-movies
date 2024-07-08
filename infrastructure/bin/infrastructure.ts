@@ -9,7 +9,6 @@ import { AngularStack } from '../lib/stacks/angular-stack';
 import { DatabaseStack } from '../lib/database-stack';
 import { NotificationStack } from '../lib/stacks/notification-stack';
 import { LikesStack } from '../lib/stacks/likes-stack';
-import { FeedStack } from '../lib/stacks/feed-stack';
 
 const app = new cdk.App();
 
@@ -47,16 +46,6 @@ new LikesStack(app, 'LikesStack', {
 	api: apigateway.api,
 	httpAuthorizer: apigateway.httpAuthorizer,
 	likes: database.likes
-});
-
-new FeedStack(app, 'FeedStack', {
-	api: apigateway.api,
-	httpAuthorizer: apigateway.httpAuthorizer,
-	metadata: database.metadata,
-	subscriptions: database.subscriptions,
-	likes: database.likes,
-	history: database.history,
-	feed: database.feed
 });
 
 app.synth();

@@ -16,7 +16,6 @@ const mapGroupsToPaths = [
   { path: '/POST/post-like', group: 'BasicUser' },
   { path: '/GET/get-like', group: 'BasicUser' },
   { path: '/DELETE/delete-like', group: 'BasicUser' },
-  { path: '/GET/get-feed', group: 'BasicUser' },
 ];
 
 function extractPathFromMethodArn(methodArn) {

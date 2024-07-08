@@ -20,7 +20,9 @@ def handler(event, context):
             Item={
                 'userId': {'S': body['userId']},  
                 'email': {'S': body['email']},
-                'topics': {'SS': body['topics'] if not body['topics'] == [] else [' ']}
+                'actors': {'SS': body['actors'] if not body['actors'] == [] else [' ']},
+                'directors': {'SS': body['directors'] if not body['directors'] == [] else [' ']},
+                'genres': {'SS': body['genres'] if not body['genres'] == [] else [' ']}
             }
         )
         
