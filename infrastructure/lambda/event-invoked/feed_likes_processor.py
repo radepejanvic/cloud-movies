@@ -19,26 +19,30 @@ def handler(event, context):
 
     try: 
         for record in event['Records']: 
-
             if record['eventName'] == 'REMOVE':
                 image = record['dynamodb']['OldImage']
             else: 
                 image = record['dynamodb']['NewImage']
+            
             movie = get_movie(image['directory'])
+            if movie is None: 
+                return
+            
+            points = get_points(record)
+            if not points == 0:
+                response = sqs.send_message(
+                    QueueUrl=queue_url,
+                    MessageBody=json.dumps({
+                        'userId': image['userId']['S'], 
+                        'actors': movie['actors'],
+                        'directors': movie['directors'],
+                        'genres': movie['genres'],
+                        'points': get_points(record),
+                        'sender': 'likes_processor'
+                    })
+                )
 
-            response = sqs.send_message(
-                QueueUrl=queue_url,
-                MessageBody=json.dumps({
-                    'userId': image['userId']['S'], 
-                    'actors': movie['actors'],
-                    'directors': movie['directors'],
-                    'genres': movie['genres'],
-                    'points': get_points(record),
-                    'sender': 'likes_processor'
-                })
-            )
-
-            logging.info(f'SQS: {response}')
+                logging.info(f'SQS: {response}')
 
     except Exception as e: 
         logging.error(e)
@@ -60,6 +64,7 @@ def get_points(record):
         return 2 
     elif not new['liked']['BOOL'] and old['liked']['BOOL']: 
         return -2
+    return 0
 
 
 def get_movie(directory): 
@@ -71,15 +76,15 @@ def get_movie(directory):
             ':directory': directory,
         }
     )
-
     logging.info(response)
 
-    item = response['Items'][0]
-    logging.info(f'Item: {item}')
+    items = response.get('Items', [])
+    logging.info(f'Item: {items}')
 
-    if not item:
+    if not items:
         return None
     
+    item = items[0]
     movie = {
         'actors': item['actors']['S'].split(','), 
         'directors': item['actors']['S'].split(','), 
