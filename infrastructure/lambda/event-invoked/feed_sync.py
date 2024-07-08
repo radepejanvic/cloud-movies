@@ -34,13 +34,9 @@ def handler(event, context):
 
 def get_keys(message): 
     # Maybe remove these categories completely
-    categories = ['actors', 'directors', 'genres']
-
     keys = set(
-        # (message['userId'], f'{category[0]}_{item}')
         (message['userId'], item)
-        for category in categories
-        for item in message[category]
+        for item in message['categories']
     )
 
     return keys

@@ -24,8 +24,8 @@ def handler(event, context):
             else: 
                 image = record['dynamodb']['NewImage']
             
-            movie = get_movie(image['directory'])
-            if movie is None: 
+            categories = get_categories(image['directory'])
+            if not categories: 
                 return
             
             points = get_points(record)
@@ -34,9 +34,7 @@ def handler(event, context):
                     QueueUrl=queue_url,
                     MessageBody=json.dumps({
                         'userId': image['userId']['S'], 
-                        'actors': movie['actors'],
-                        'directors': movie['directors'],
-                        'genres': movie['genres'],
+                        'categories': list(categories),
                         'points': get_points(record),
                         'sender': 'likes_processor'
                     })
@@ -67,7 +65,7 @@ def get_points(record):
     return 0
 
 
-def get_movie(directory): 
+def get_categories(directory): 
     response = dynamodb.query(
         TableName=metadata_table,
         KeyConditionExpression='directory = :directory',
@@ -83,12 +81,15 @@ def get_movie(directory):
 
     if not items:
         return None
-    
-    item = items[0]
-    movie = {
-        'actors': item['actors']['S'].split(','), 
-        'directors': item['actors']['S'].split(','), 
-        'genres': item['genres']['S'].split(',')
-    }
 
-    return movie
+    return parse_categories(items[0])
+
+def parse_categories(movie):
+    categories = set()
+
+    # TODO: Concatenate strings before splitting
+    if movie['actors']['S']: categories.update(movie['actors']['S'].split(','))
+    if movie['directors']['S']: categories.update(movie['directors']['S'].split(','))
+    if movie['genres']['S']: categories.update(movie['genres']['S'].split(','))
+    
+    return categories
